@@ -1,66 +1,172 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Number : MonoBehaviour
 {
-    private Image background;
-    private Text numberText;
-    private int numberValue;
+    private Image bg;
+    private Text number_text;
+    private Tile tile;
 
-    public Dictionary<int, string> backgroundColors = new Dictionary<int, string>() {
-        { 2, "#eee4da" }, { 4, "#ede0c8" }, { 8, "#f9f6f2" }, { 16, "#f59563" },
-        { 32, "#f67c5f" }, { 64, "#f65e3b" }, { 128, "#edcf72" },{ 256, "#edcc61" },
-        { 512, "#edc850" }, { 1024, "#edc53f" }, { 2048, "#edc22e" }
-    };
-    ////所属格子
-    //private Tile tile;
+    public NumberState status;
 
-    void Awake() {
-        background = transform.GetComponent<Image>();
-        numberText = transform.Find("Text").GetComponent<Text>();
+    private float spawnScaleTime = 1;
+    private bool isPlaySpawnAnim;
 
-    }
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    /// <param name="number"></param>
-    public Number Init(bool isShow, int number = 2) {
-        this.SetNumberValue(number);
-        SetColor(number);
-        return this;
-    }
+    private float mergeScaleTime = 1;
+    private float mergeScaleTimeBack = 1;
+    private bool isPlayMergeAnim;
 
-    /// <summary>
-    /// 设置文本显示,因为动画的存在，这是一个延时显示
-    /// </summary>
-    /// <param name="number"></param>
-    public void SetNumberValueText(int number) {
-        this.numberText.text = number.ToString();
-        SetColor(number);
-    }
-    /// <summary>
-    /// 设置实时数字
-    /// </summary>
-    /// <param name="number"></param>
-    public void SetNumberValue(int number) {
-        numberValue = number;
+    private float movePosTime = 1;
+    private bool isMoving;
+    private bool isDestroyOnMoveEnd;
+    private Vector3 startMovPos;
+
+    public Color[] bg_Colors;
+    public List<int> number_index;
+
+    public int index;
+    private void Awake() {
+        //初始化
+        bg = transform.GetComponent<Image>();
+        number_text = gameObject.GetComponentInChildren<Text>();
+        //index = Random.Range(0, 2);
+        index = 1;
     }
 
-    public int GetNumberValue() {
-        return numberValue;
+    //初始化
+    public void Init(Tile tile) {
+        tile.SetNumber(this);
+        //设置所在的格子
+        this.SetTile(tile);
+        //设置初始化的数字
+        if (index == 1)
+            this.SetNumber(2);
+        else
+            this.SetNumber(4);
+        status = NumberState.Normal;
+
+        PlaySpawnAnimation();
     }
 
-    public void MoveToGrid(Tile target, GameBoard board) {
-        transform.SetParent(target.transform);
-        transform.localPosition = Vector3.zero;
+    //设置格子
+    public void SetTile(Tile tile) {
+        this.tile = tile;
+    }
+    //获取格子
+    public Tile GetTile() {
+        return this.tile;
+    }
+
+    //设置数字
+    public void SetNumber(int number) {
+        this.number_text.text = number.ToString();
+        this.bg.color = this.bg_Colors[number_index.IndexOf(number)];
+    }
+
+    //获取数字
+    public int GetNumber() {
+        return int.Parse(number_text.text);
+    }
+
+    //把数字移动到某个格子下面
+    public void MoveToTile(Tile tile) {
+        transform.SetParent(tile.transform);
+        //transform.localPosition = Vector3.zero;
+        startMovPos = transform.localPosition;
+
+        PlayMoveAnimation();
+
+        this.GetTile().SetNumber(null);
+        //设置格子
+        tile.SetNumber(this);
+        this.SetTile(tile);
+    }
+
+    public void DestroyOnMoveEnd(Tile tile) {
+        transform.SetParent(tile.transform);
+        startMovPos = transform.localPosition;
+
+        PlayMoveAnimation();
+        isDestroyOnMoveEnd = true;
+    }
+
+    //合并
+    public void Merge() {
+        GameBoard gameBoard = GameObject.Find("Canvas/GameBoard").GetComponent<GameBoard>();
+        //gameBoard.AddScore(this.GetNumber());
+
+        int resultNumber = this.GetNumber() * 2;
+        this.SetNumber(this.GetNumber() * 2);
+        if (resultNumber == 2048) {
+            //gameBoard.GameWin();
+        }
+        status = NumberState.NotMerge;
+        PlayMergeAnimation();
+        //AudioManager.PlaySound();
     }
 
 
-    private void SetColor(int value) {
-        Color color = new Color(238 / 255f, 228 / 255f, 219 / 255f);
-        ColorUtility.TryParseHtmlString(backgroundColors[value], out color);
-        background.color = color;
+    //判断能不能合并
+    public bool IsMerge(Number number) {
+        if (this.GetNumber() == number.GetNumber() && number.status == NumberState.Normal)
+            return true;
+        return false;
+    }
+
+
+    public void PlaySpawnAnimation() {
+        spawnScaleTime = 0;
+        isPlaySpawnAnim = true;
+    }
+
+    public void PlayMergeAnimation() {
+        mergeScaleTime = 0;
+        mergeScaleTimeBack = 0;
+        isPlayMergeAnim = true;
+    }
+
+    public void PlayMoveAnimation() {
+        movePosTime = 0;
+        isMoving = true;
+    }
+
+    public void Update() {
+        //创建的动画
+        if (isPlaySpawnAnim) {
+            if (spawnScaleTime <= 1) {
+                spawnScaleTime += Time.deltaTime * 4;
+                transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, spawnScaleTime);
+            } else
+                isPlaySpawnAnim = false;
+        }
+
+        //合并的动画 
+        if (isPlayMergeAnim) {
+            if (mergeScaleTime <= 1 && mergeScaleTimeBack == 0) {
+                mergeScaleTime += Time.deltaTime * 4;
+                transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.2f, mergeScaleTime);
+            }
+            if (mergeScaleTime >= 1 && mergeScaleTimeBack <= 1) {
+                mergeScaleTimeBack += Time.deltaTime * 4;
+                transform.localScale = Vector3.Lerp(Vector3.one * 1.2f, Vector3.one, mergeScaleTime);
+            }
+            if (mergeScaleTime >= 1 && mergeScaleTimeBack >= 1)
+                isPlayMergeAnim = false;
+        }
+
+
+        //移动的动画
+        if (isMoving) {
+
+            movePosTime += Time.deltaTime * 5;
+            transform.localPosition = Vector3.Lerp(startMovPos, Vector3.zero, movePosTime);
+            if (movePosTime >= 1) {
+                isMoving = false;
+                if (isDestroyOnMoveEnd)
+                    GameObject.Destroy(this.gameObject);
+            }
+
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,11 +26,12 @@ public class GameBoard : MonoBehaviour
 
     public List<Tile> emptytiles = new List<Tile>();
 
-    public GameObject itemPrefab;
+    public GameObject tilePrefab;
+    public GameObject numberPrefab;
 
     private Vector3 pointerDownPos, pointerUpPos;
 
-    private bool moveAndMerge;
+    private bool isNeedNumber;
 
     public enum MoveDirection {
         UP,
@@ -42,10 +42,12 @@ public class GameBoard : MonoBehaviour
 
     void Awake() {
 
-        InitGrid();
+        InitTile();
 
-        StartCoroutine(CreateNumber());
+        CreateNumber();
+        CreateNumber();
     }
+
 
     public void OnLastButtonPressed() {
 
@@ -59,7 +61,7 @@ public class GameBoard : MonoBehaviour
     /// <summary>
     /// 初始化格子
     /// </summary>
-    public void InitGrid() {
+    public void InitTile() {
         int number = PlayerPrefs.GetInt(Const.GameModel, 4);
         GridLayoutGroup gridLayoutGroup = grid.GetComponent<GridLayoutGroup>();
         gridLayoutGroup.constraintCount = number;
@@ -75,43 +77,41 @@ public class GameBoard : MonoBehaviour
                     tiles[i] = new Tile[number];
                 }
                 tiles[i][j] = CreateTile();
-                tiles[i][j].x = i;
-                tiles[i][j].y = j;
+                tiles[i][j].name = "tile" + i + j;
             }
         }
     }
 
     public Tile CreateTile() {
-        GameObject gameObject = GameObject.Instantiate(itemPrefab, grid);
-        //gameObject.GetComponent<Tile>().InitNumber(false);
+        GameObject gameObject = GameObject.Instantiate(tilePrefab, grid);
         return gameObject.GetComponent<Tile>();
 
     }
     /// <summary>
     /// 创建数字
     /// </summary>
-    public IEnumerator CreateNumber() {
-        // 选择格子
+    public void CreateNumber() {
+        //找到这个数字所在的格子
         emptytiles.Clear();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                if (!tiles[i][j].hasNumber()) {
+                //判断这个格子是否有数字
+                if (!tiles[i][j].isHaveNumber()) {
+                    //添加空格子
                     emptytiles.Add(tiles[i][j]);
                 }
             }
         }
-        if (emptytiles.Count == 0) {
-            // TODO YOU LOSE
-            Debug.Log("You Lose !!!");
-            yield return 0; 
-        } else {
-            yield return new WaitForSeconds(0.5f);
-            // 随机一个格子
-            int index = Random.Range(0, emptytiles.Count);
-            emptytiles[index].gameObject.GetComponent<Tile>().CreateNumber();
-            Debug.Log($"产生新点：({emptytiles[index].x}, {emptytiles[index].y})");
-        }
-        
+        //如果空格子数量为0，那么就不能创建数字
+        if (emptytiles.Count == 0)
+            return;
+        //随机一个格子
+        int index = Random.Range(0, emptytiles.Count);
+        //创建数字并把数字放到格子里
+        GameObject gameObject = Instantiate(numberPrefab, emptytiles[index].transform);
+        //对数字进行初始化
+        gameObject.GetComponent<Number>().Init(emptytiles[index]);
+
     }
 
 
@@ -121,17 +121,28 @@ public class GameBoard : MonoBehaviour
 
     public void OnPointUpEvent() {
         pointerUpPos = Input.mousePosition;
-
-        if (Vector3.Distance(pointerUpPos, pointerDownPos) < 10) {
-            Debug.Log("无效滑动");
+        if (Vector3.Distance(pointerUpPos, pointerDownPos) < 100) {
             return;
         }
-        MoveDirection moveDirection = GetMoveDirection();
-        Debug.Log($"滑动类型:{moveDirection}");
-        MoveAndMergeNumber(moveDirection);
-        if (moveAndMerge) {
-            StartCoroutine(CreateNumber());
+        //保存数据
+        //lastStepModel.UpdateData(this.currentScore, PlayerPrefs.GetInt(Const.BestScore, 0), tiles);
+        //btn_LastStep.interactable = true;
+
+        MoveDirection direction = GetMoveDirection();
+        MoveNumber(direction);
+        //产生一个新的数字
+        if (isNeedNumber) {
+            CreateNumber();
+            isNeedNumber = false;
         }
+
+        //把所有数字恢复正常状态
+        ResetNumberStatus();
+
+        //判断游戏是否结束？
+        //if (IsGameOver()) {
+        //    GameOver();
+        //}
     }
 
 
@@ -150,36 +161,24 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-    /// <summary>
-    /// 核心算法：移动数字 
-    /// </summary>
-    /// <param name="direction"></param>
-    public void MoveAndMergeNumber(MoveDirection direction) {
-        moveAndMerge = false;
+
+    public void MoveNumber(MoveDirection direction) {
         switch (direction) {
             case MoveDirection.UP:
                 for (int j = 0; j < column; j++) {
                     for (int i = 1; i < row; i++) {
-                        if (tiles[i][j].hasNumber()) {
-                            //处理当前tiles[i][j]
-                            int targetRow = i;
-                            bool merge = false;
-                            for (int m = i - 1; m >= 0; m--) {
-                                if (tiles[m][j].hasNumber()) {
-                                    if (tiles[i][j].GetNumber().GetNumberValue() == tiles[m][j].GetNumber().GetNumberValue()) {
-                                        tiles[i][j].MergeNumber(tiles[m][j]);
-                                        merge = true;
-                                        moveAndMerge = true;
-                                        break;
-                                    }
+                        if (tiles[i][j].isHaveNumber()) {
+                            Number number = tiles[i][j].GetNumber();
 
-                                } else {
-                                    targetRow = m;
+                            for (int m = i - 1; m >= 0; m--) {
+                                Number targetNumber = null;
+                                if (tiles[m][j].isHaveNumber()) {
+                                    targetNumber = tiles[m][j].GetNumber();
                                 }
-                            }
-                            if (tiles[i][j].hasNumber() && !merge && targetRow != i) {
-                                tiles[i][j].MoveNumber(tiles[targetRow][j]);
-                                moveAndMerge = true;
+                                HandleNumber(number, targetNumber, tiles[m][j]);
+                                if (targetNumber != null) {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -188,26 +187,17 @@ public class GameBoard : MonoBehaviour
             case MoveDirection.DOWN:
                 for (int j = 0; j < column; j++) {
                     for (int i = row - 2; i >= 0; i--) {
-                        if (tiles[i][j].hasNumber()) {
-                            //处理当前tiles[i][j]
-                            int targetRow = i;
-                            bool merge = false;
-                            for (int m = i + 1; m <= row - 1; m++) {
-                                if (tiles[m][j].hasNumber()) {
-                                    if (tiles[i][j].GetNumber().GetNumberValue() == tiles[m][j].GetNumber().GetNumberValue()) {
-                                        tiles[i][j].MergeNumber(tiles[m][j]);
-                                        merge = true;
-                                        moveAndMerge = true;
-                                        break;
-                                    }
-
-                                } else {
-                                    targetRow = m;
+                        if (tiles[i][j].isHaveNumber()) {
+                            Number number = tiles[i][j].GetNumber();
+                            for (int m = i + 1; m < row; m++) {
+                                Number targetNumber = null;
+                                if (tiles[m][j].isHaveNumber()) {
+                                    targetNumber = tiles[m][j].GetNumber();
                                 }
-                            }
-                            if (tiles[i][j].hasNumber() && !merge && targetRow != i) {
-                                tiles[i][j].MoveNumber(tiles[targetRow][j]);
-                                moveAndMerge = true;
+                                HandleNumber(number, targetNumber, tiles[m][j]);
+                                if (targetNumber != null) {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -216,26 +206,17 @@ public class GameBoard : MonoBehaviour
             case MoveDirection.LEFT:
                 for (int i = 0; i < row; i++) {
                     for (int j = 1; j < column; j++) {
-                        if (tiles[i][j].hasNumber()) {
-                            //处理当前tiles[i][j]
-                            int targetColumn = j;
-                            bool merge = false;
+                        if (tiles[i][j].isHaveNumber()) {
+                            Number number = tiles[i][j].GetNumber();
                             for (int m = j - 1; m >= 0; m--) {
-                                if (tiles[i][m].hasNumber()) {
-                                    if (tiles[i][j].GetNumber().GetNumberValue() == tiles[i][m].GetNumber().GetNumberValue()) {
-                                        tiles[i][j].MergeNumber(tiles[i][m]);
-                                        merge = true;
-                                        moveAndMerge = true;
-                                        break;
-                                    }
-
-                                } else {
-                                    targetColumn = m;
+                                Number targetNumber = null;
+                                if (tiles[i][m].isHaveNumber()) {
+                                    targetNumber = tiles[i][m].GetNumber();
                                 }
-                            }
-                            if (tiles[i][j].hasNumber() && !merge && targetColumn != j) {
-                                tiles[i][j].MoveNumber(tiles[i][targetColumn]);
-                                moveAndMerge = true;
+                                HandleNumber(number, targetNumber, tiles[i][m]);
+                                if (targetNumber != null) {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -243,32 +224,55 @@ public class GameBoard : MonoBehaviour
                 break;
             case MoveDirection.RIGHT:
                 for (int i = 0; i < row; i++) {
-                    for (int j  = column - 2; j >= 0; j--) {
-                        if (tiles[i][j].hasNumber()) {
-                            //处理当前tiles[i][j]
-                            int targetColumn = j;
-                            bool merge = false;
+                    for (int j = column - 2; j >= 0; j--) {
+                        if (tiles[i][j].isHaveNumber()) {
+                            Number number = tiles[i][j].GetNumber();
                             for (int m = j + 1; m < column; m++) {
-                                if (tiles[i][m].hasNumber()) {
-                                    if (tiles[i][j].GetNumber().GetNumberValue() == tiles[i][m].GetNumber().GetNumberValue()) {
-                                        tiles[i][j].MergeNumber(tiles[i][m]);
-                                        merge = true;
-                                        moveAndMerge = true;
-                                        break;
-                                    }
-
-                                } else {
-                                    targetColumn = m;
+                                Number targetNumber = null;
+                                if (tiles[i][m].isHaveNumber()) {
+                                    targetNumber = tiles[i][m].GetNumber();
                                 }
-                            }
-                            if (tiles[i][j].hasNumber() && !merge && targetColumn != j) {
-                                tiles[i][j].MoveNumber(tiles[i][targetColumn]);
-                                moveAndMerge = true;
+                                HandleNumber(number, targetNumber, tiles[i][m]);
+                                if (targetNumber != null) {
+                                    break;
+                                }
                             }
                         }
                     }
                 }
                 break;
+            default:
+                break;
+        }
+    }
+
+    //处理数字
+    public void HandleNumber(Number current, Number target, Tile targetTile) {
+        if (target != null) {
+            //判断能不能合并
+            if (current.IsMerge(target)) {
+
+                isNeedNumber = true;
+                //销毁当前的数字 
+                current.GetTile().SetNumber(null);
+                //GameObject.Destroy(current.gameObject);
+                current.DestroyOnMoveEnd(target.GetTile());
+                target.Merge();
+            }
+        } else {
+            current.MoveToTile(targetTile);
+            isNeedNumber = true;
+        }
+    }
+
+    //恢复数字
+    public void ResetNumberStatus() {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (tiles[i][j].isHaveNumber()) {
+                    tiles[i][j].GetNumber().status = NumberState.Normal;
+                }
+            }
         }
     }
 

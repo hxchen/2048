@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 452760591}
   - component: {fileID: 452760592}
   m_Layer: 5
-  m_Name: Grid
+  m_Name: Tiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2137,14 +2137,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214c9d8f232924db99aa419054a457b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
+  scoreText: {fileID: 815074462}
   bestScoreText: {fileID: 607773797}
   lastButton: {fileID: 2019953699}
   newButton: {fileID: 1012773847}
   exitButton: {fileID: 2029425358}
   grid: {fileID: 452760588}
   emptytiles: []
-  itemPrefab: {fileID: 2073900558355991990, guid: e81f4cbc8c72046ca8280153c8825d07, type: 3}
+  tilePrefab: {fileID: 2073900558355991990, guid: e81f4cbc8c72046ca8280153c8825d07, type: 3}
   numberPrefab: {fileID: 7264879878323652286, guid: 492230a614fee4ad5b0f201bb950d444, type: 3}
 --- !u!1 &1444281708
 GameObject:
