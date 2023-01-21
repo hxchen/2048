@@ -41,9 +41,9 @@ public class Number : MonoBehaviour
         this.SetTile(tile);
         //设置初始化的数字
         if (index == 1)
-            this.SetNumber(2);
+            this.SetNumberValue(2);
         else
-            this.SetNumber(4);
+            this.SetNumberValue(4);
         status = NumberState.Normal;
 
         PlaySpawnAnimation();
@@ -59,13 +59,13 @@ public class Number : MonoBehaviour
     }
 
     //设置数字
-    public void SetNumber(int number) {
+    public void SetNumberValue(int number) {
         this.number_text.text = number.ToString();
         this.bg.color = this.bg_Colors[number_index.IndexOf(number)];
     }
 
     //获取数字
-    public int GetNumber() {
+    public int GetNumberValue() {
         return int.Parse(number_text.text);
     }
 
@@ -94,22 +94,23 @@ public class Number : MonoBehaviour
     //合并
     public void Merge() {
         GameBoard gameBoard = GameObject.Find("Canvas/GameBoard").GetComponent<GameBoard>();
-        //gameBoard.AddScore(this.GetNumber());
+        
+        int resultNumber = this.GetNumberValue() * 2;
+        gameBoard.AddScore(resultNumber);
 
-        int resultNumber = this.GetNumber() * 2;
-        this.SetNumber(this.GetNumber() * 2);
+        this.SetNumberValue(this.GetNumberValue() * 2);
         if (resultNumber == 2048) {
-            //gameBoard.GameWin();
+            gameBoard.GameWin();
         }
         status = NumberState.NotMerge;
         PlayMergeAnimation();
-        //AudioManager.PlaySound();
+        SoundManager.instance.PlaySound();
     }
 
 
     //判断能不能合并
     public bool IsMerge(Number number) {
-        if (this.GetNumber() == number.GetNumber() && number.status == NumberState.Normal)
+        if (this.GetNumberValue() == number.GetNumberValue() && number.status == NumberState.Normal)
             return true;
         return false;
     }

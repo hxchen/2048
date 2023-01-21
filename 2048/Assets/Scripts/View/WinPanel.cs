@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class WinPanel : MonoBehaviour
+public class WinPanel : View
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public void OnNewButonPressed() {
+        GameObject.Find("Canvas/GameBoard").GetComponent<GameBoard>().RestartGame();
+        Close();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void OnExitButtonPressed() {
+        SceneManager.LoadSceneAsync(0);
     }
 }

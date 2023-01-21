@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour
     public Number number;
 
     //判断格子中是否有数字
-    public bool isHaveNumber() {
+    public bool HaveNumber() {
         return number != null;
     }
 

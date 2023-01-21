@@ -22,12 +22,14 @@ public class SettingsPanel : View
     /// </summary>
     public void OnSoundedValueChange(float value) {
         PlayerPrefs.SetFloat(Const.Sound, value);
+        SoundManager.instance.OnSoundValueChange(value);
     }
     /// <summary>
     /// 音乐
     /// </summary>
     public void OnMusicValueChange(float value) {
         PlayerPrefs.SetFloat(Const.Music, value);
+        SoundManager.instance.OnMusicValueChange(value);
     }
 
     public override void Show() {
