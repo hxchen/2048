@@ -1,0 +1,4 @@
+#Mon Jan 23 21:43:03 CST 2023
+base.0=/Users/haixiangchen/Desktop/UnityProjects/2048/2048/Temp/gradleOut/launcher/build/intermediates/dex/release/mergeDexRelease/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

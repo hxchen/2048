@@ -24,9 +24,8 @@ public class GameBoard : MonoBehaviour {
 
     public GameObject numberPrefab;
 
-    public WinPanel winPanel;
+    public AlertPanel alertPanel;
 
-    public LosePanel losePanel;
 
     #endregion
 
@@ -107,14 +106,16 @@ public class GameBoard : MonoBehaviour {
     /// 显示胜利UI
     /// </summary>
     public void GameWin() {
-        winPanel.Show();
+        alertPanel.setAlertText("You Win!");
+        alertPanel.Show();
     }
 
     /// <summary>
     /// 显示失败UI
     /// </summary>
     public void GameLose() {
-        losePanel.Show();
+        alertPanel.setAlertText("Game Over!");
+        alertPanel.Show();
     }
 
     /// <summary>
@@ -126,8 +127,9 @@ public class GameBoard : MonoBehaviour {
         UpdateScoreUI(score);
         int bestScore = PlayerPrefs.GetInt(Const.BestScore, 0);
         if (score > bestScore) {
+            bestScore = score;
             PlayerPrefs.SetInt(Const.BestScore, bestScore);
-            UpdateBestScoreUI(score);
+            UpdateBestScoreUI(bestScore);
         }
         
     }
