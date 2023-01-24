@@ -67,6 +67,9 @@ public class GameBoard : MonoBehaviour {
         CreateNumber();
         CreateNumber();
 
+        // Unity 广告加载
+        InterstitialAd.instance.LoadAd();
+
     }
 
 
@@ -92,6 +95,8 @@ public class GameBoard : MonoBehaviour {
     /// 重新开始按钮事件
     /// </summary>
     public void OnNewButtonPressed() {
+        // 展示广告
+        InterstitialAd.instance.ShowAd();
         RestartGame();
     }
 
@@ -536,7 +541,10 @@ public class GameBoard : MonoBehaviour {
         }
         return false;
     }
-    
-#endregion
 
+    #endregion
+
+#region Ads
+
+#endregion
 }

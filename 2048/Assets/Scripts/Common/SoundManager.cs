@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
 
         PlayBgm();
 
-        instance.bgmAudioSource.volume = PlayerPrefs.GetFloat(Const.Music, 0.5f);
+        instance.bgmAudioSource.volume = PlayerPrefs.GetFloat(Const.Music, 0f);
         instance.mergeAudioSource.volume = PlayerPrefs.GetFloat(Const.Sound, 0.5f);
     }
     /// <summary>
@@ -42,5 +42,10 @@ public class SoundManager : MonoBehaviour
 
     public void OnMusicValueChange(float value) {
         instance.bgmAudioSource.volume = value;
+    }
+
+
+    public void SetBgmMute(bool mute) {
+        instance.bgmAudioSource.mute = mute; 
     }
 }
