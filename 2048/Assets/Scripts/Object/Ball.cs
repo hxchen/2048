@@ -1,79 +1,95 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
     #region 自身组件
-    
-    
+    public TextMeshPro numberText;
 
     #endregion
 
     #region 业务变量
 
-    public float strength = 5f;
-
-    private bool drag;
-
-    private GameObject selectedBall;
+    private float scale = 5;
 
     private float leftEdge;
 
+    private float rightEdge;
+
+    private float bottomEdge;
+
+    public Color[] bg_Colors;
+
+    public Color[] num_Colors;
+
+    public List<int> number_index;
 
     #endregion
 
     void Awake() {
-        
-        leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
+
+
+        float halfSreenHeight = Camera.main.orthographicSize;
+        float halfScreenWidth = Screen.width / (float)Screen.height * halfSreenHeight;
+
+        leftEdge = -halfScreenWidth - 1f;
+
+        rightEdge = halfScreenWidth + 1f;
+
+        bottomEdge = -halfSreenHeight - 1f;
+
+        //Debug.Log($"left:{leftEdge}, right:{rightEdge}, bottom:{bottomEdge}");
 
     }
-
+    
     public void Update() {
-        HandleInput();
+        if (transform.position.x < leftEdge || transform.position.x > rightEdge || transform.position.y < bottomEdge) {
+            Destroy(gameObject);
+            BallManager.instancs.NeedNewBall();
+        } else {
+            scale = 4 + Mathf.Log(GetNumber(), 2) / 2;
+            transform.localScale = new Vector3(scale, scale, 1);
+            GetComponent<SpriteRenderer>().color = bg_Colors[number_index.IndexOf(GetNumber())];
+            numberText.color = num_Colors[number_index.IndexOf(GetNumber())];
+        }
     }
 
-    public void HandleInput() {
-        if (Input.GetMouseButtonDown(0)) {
-            drag = true;
-            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject.CompareTag("Ball")) {
-                Debug.Log($"选中" + hit.collider.gameObject.name);
-                selectedBall = hit.collider.gameObject;
+    
 
-                selectedBall.GetComponent<SpringJoint2D>().enabled = true;
-                selectedBall.GetComponent<LineRenderer>().enabled = true;
-                
+    /// <summary>
+    /// 碰撞事件
+    /// </summary>
+    /// <param name="collision"></param>
+    public void OnCollisionEnter2D(Collision2D other) {
+        
+        if (other.gameObject.tag == "Ball") {
+            if (GetInstanceID() < other.gameObject.GetInstanceID()) {
+                return;
+            }
+            
+            if (GetNumber() == other.gameObject.GetComponent<Ball>().GetNumber()) {
+                Debug.Log($"发生碰撞,碰撞数字:{GetNumber()}, 位置, this:{transform.position}, other:{other.transform.position}");
+                BallManager.instancs.MergeBalls(gameObject, other.gameObject);
 
             }
         }
-
-        if (Input.GetMouseButtonUp(0)) {
-            drag = false;
-            selectedBall.GetComponent<SpringJoint2D>().enabled = false;
-            selectedBall.GetComponent<LineRenderer>().enabled = false;
-
-            selectedBall = null;
-        }
-
-        if (drag && selectedBall != null) {
-            Debug.Log($"选中" + selectedBall.name);
-            var point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            // 画线
-            Vector2 currentPos;
-            currentPos.x = point.x;
-            currentPos.y = point.y;
-            selectedBall.GetComponent<LineRenderer>().SetPosition(0, selectedBall.transform.position);
-            selectedBall.GetComponent<LineRenderer>().SetPosition(1, currentPos);
-            // 设置弹簧, 链接Ball和当前位置
-            Vector2 connectedAnchor = selectedBall.GetComponent<SpringJoint2D>().connectedAnchor;
-            connectedAnchor.x = currentPos.x;
-            connectedAnchor.y = currentPos.y;
-            selectedBall.GetComponent<SpringJoint2D>().connectedAnchor = connectedAnchor;
-            // 施加力
-            Vector2 ballPos;
-            ballPos.x = selectedBall.transform.position.x;
-            ballPos.y = selectedBall.transform.position.y;
-            var rigidbody2D = selectedBall.GetComponent<Rigidbody2D>();
-            rigidbody2D.AddForce((currentPos - ballPos) * rigidbody2D.mass * strength, ForceMode2D.Force);
-        }
     }
+    /// <summary>
+    /// 获取本对象球内数字
+    /// </summary>
+    /// <returns></returns>
+    public int GetNumber() {
+        return int.Parse(numberText.text);
+    }
+
+    /// <summary>
+    /// 设置本对象球内数字
+    /// </summary>
+    /// <param name="number"></param>
+    public void SetNumber(int number) {
+        numberText.text = number.ToString();
+        
+    }
+    
 }

@@ -41,9 +41,9 @@ public class Number : MonoBehaviour
         this.SetTile(tile);
         //设置初始化的数字
         if (index == 1)
-            this.SetNumberValue(2);
+            SetNumberValue(2);
         else
-            this.SetNumberValue(4);
+            SetNumberValue(4);
         status = NumberState.Normal;
 
         PlaySpawnAnimation();
@@ -60,8 +60,8 @@ public class Number : MonoBehaviour
 
     //设置数字
     public void SetNumberValue(int number) {
-        this.number_text.text = number.ToString();
-        this.bg.color = this.bg_Colors[number_index.IndexOf(number)];
+        number_text.text = number.ToString();
+        bg.color = bg_Colors[number_index.IndexOf(number)];
     }
 
     //获取数字
@@ -165,7 +165,7 @@ public class Number : MonoBehaviour
             if (movePosTime >= 1) {
                 isMoving = false;
                 if (isDestroyOnMoveEnd)
-                    GameObject.Destroy(this.gameObject);
+                    Destroy(this.gameObject);
             }
 
         }

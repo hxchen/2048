@@ -4,4 +4,5 @@ public class Const
     public const string Sound = "sound";
     public const string Music = "music";
     public const string BestScore = "best_score";
+    public const string BestScoreBall = "best_score_ball";
 }

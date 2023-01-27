@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameBoard : MonoBehaviour {
 
-#region UI
+    #region UI
     public Text scoreText;
 
     public int score;
