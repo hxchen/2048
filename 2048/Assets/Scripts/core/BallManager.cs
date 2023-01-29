@@ -34,7 +34,6 @@ public class BallManager : MonoBehaviour
         totalBalls = 0;
         needNewBall = false;
         waitTime = 0;
-        Spawn();
     }
 
     public void Update() {
@@ -185,5 +184,12 @@ public class BallManager : MonoBehaviour
     /// </summary>
     public void NeedNewBall() {
         needNewBall = true;
+    }
+
+    /// <summary>
+    /// 开始
+    /// </summary>
+    public void StartGame() {
+        Spawn();
     }
 }

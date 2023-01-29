@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/02-game.unity
     guid: 2831c35c613e340278faad1420a662f5
+  - enabled: 1
+    path: Assets/Scenes/03-couch.unity
+    guid: bf39f40d52abe4d9c953f4859f3a840e
   m_configObjects: {}

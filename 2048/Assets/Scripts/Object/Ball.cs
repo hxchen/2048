@@ -10,8 +10,9 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region 业务变量
+    public int initSize;
 
-    private float scale = 5;
+    private float scale;
 
     private float leftEdge;
 
@@ -46,9 +47,11 @@ public class Ball : MonoBehaviour
     public void Update() {
         if (transform.position.x < leftEdge || transform.position.x > rightEdge || transform.position.y < bottomEdge) {
             Destroy(gameObject);
+            BallMain.instance.SubtractLife();
             BallManager.instancs.NeedNewBall();
+
         } else {
-            scale = 4 + Mathf.Log(GetNumber(), 2) / 2;
+            scale = initSize + Mathf.Log(GetNumber(), 2) / 2;
             transform.localScale = new Vector3(scale, scale, 1);
             GetComponent<SpriteRenderer>().color = bg_Colors[number_index.IndexOf(GetNumber())];
             numberText.color = num_Colors[number_index.IndexOf(GetNumber())];
