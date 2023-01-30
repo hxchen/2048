@@ -1,0 +1,2 @@
+/Users/haixiangchen/Desktop/UnityProjects/2048/2048/obj/Debug/UnityEngine.TestRunner.csproj.AssemblyReference.cache
+/Users/haixiangchen/Desktop/UnityProjects/2048/2048/obj/Debug/UnityEngine.TestRunner.csproj.CoreCompileInputs.cache

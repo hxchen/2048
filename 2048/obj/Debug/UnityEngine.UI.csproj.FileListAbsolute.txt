@@ -1,0 +1,1 @@
+/Users/haixiangchen/Desktop/UnityProjects/2048/2048/obj/Debug/UnityEngine.UI.csproj.CoreCompileInputs.cache

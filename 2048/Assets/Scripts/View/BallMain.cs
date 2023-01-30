@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,8 @@ public class BallMain : MonoBehaviour
 
     public AlertPanel alertPanel;
 
+    public ShopPanel shopPanel;
+
     public Button playButton;
 
     public Button shopButton;
@@ -26,6 +29,7 @@ public class BallMain : MonoBehaviour
     private int score;
 
     public int fullLife;
+
 
     #endregion
 
@@ -92,7 +96,8 @@ public class BallMain : MonoBehaviour
     /// Shop按钮
     /// </summary>
     public void OnShopButtonPressed() {
-
+        Debug.Log("打开商店");
+        shopPanel.gameObject.SetActive(true);
     }
 
     /// <summary>

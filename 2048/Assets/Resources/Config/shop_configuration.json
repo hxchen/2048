@@ -1,0 +1,44 @@
+{
+    "iapItems": [
+        {
+            "itemId": "couch_1",
+            "price": 0,
+            "status": "Using"
+        },
+        {
+            "itemId": "couch_2",
+            "price": 999,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_3",
+            "price": 1499,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_4",
+            "price": 1999,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_5",
+            "price": 2499,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_6",
+            "price": 2999,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_7",
+            "price": 3499,
+            "status": "Locked"
+        },
+        {
+            "itemId": "couch_8",
+            "price": 9999,
+            "status": "Locked"
+        }
+    ]
+}
