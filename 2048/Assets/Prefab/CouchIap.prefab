@@ -170,10 +170,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2448deb53ce40d39d60ea5ebd6cd13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  couch: {fileID: 1054492194704292758}
+  couch: {fileID: 1054492194704292752}
   price: {fileID: 1054492192987870173}
   button: {fileID: 1054492193920887839}
   buttonText: {fileID: 1054492194990285438}
+  couchesImages:
+  - {fileID: 21300000, guid: 569240dc83f6148dfa630d7e607503a2, type: 3}
+  - {fileID: 21300000, guid: 986a4493efdc34630ac6e3bc81175174, type: 3}
+  - {fileID: 21300000, guid: a9ed3e45933f647bbad0d008a8bef862, type: 3}
+  - {fileID: 21300000, guid: dfae7e2c6cab8421080e542058b48fb7, type: 3}
+  - {fileID: 21300000, guid: c2865505d9f9b432f87a26f7a9eb53c5, type: 3}
+  - {fileID: 21300000, guid: 66570c7e197ee40b9a42b44b3d73c215, type: 3}
+  - {fileID: 21300000, guid: 6c78d6090e09f42758f5eee3f7dd1057, type: 3}
+  - {fileID: 21300000, guid: 170905fc6eda149dfae60336a21dbbb3, type: 3}
+  string_index:
+  - couch_1
+  - couch_2
+  - couch_3
+  - couch_4
+  - couch_5
+  - couch_6
+  - couch_7
+  - couch_8
 --- !u!1 &1054492193920887833
 GameObject:
   m_ObjectHideFlags: 0
