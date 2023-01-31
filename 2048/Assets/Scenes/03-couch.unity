@@ -1188,6 +1188,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409913126}
   m_CullTransparentMesh: 1
+--- !u!1 &448994626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 448994627}
+  - component: {fileID: 448994628}
+  m_Layer: 0
+  m_Name: CouchManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &448994627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448994626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &448994628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448994626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16491a89e3884462288cef7253d58298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  couchManager: {fileID: 448994626}
+  couchPrefabs:
+  - {fileID: 1506090537470518618, guid: 68e0387ddd938487a919052778c98c66, type: 3}
+  - {fileID: 2295312594940690891, guid: 769d84bbfd19142089e707955436018c, type: 3}
+  - {fileID: 2295312594940690891, guid: 6ead3101dfb384de8b578b47a4fd5ff3, type: 3}
+  - {fileID: 2295312594940690891, guid: 1bc53488aca9045b4b76e31f2ff346bc, type: 3}
+  - {fileID: 2295312594940690891, guid: 479db02818bd04890a33611d24048c9c, type: 3}
+  - {fileID: 2295312594940690891, guid: d54bdbe82d4f54a899519f42ab93d9f4, type: 3}
+  - {fileID: 2295312594940690891, guid: 83720dd7f8bed44eea67ca6247829259, type: 3}
+  - {fileID: 2295312594940690891, guid: 79dc3443a4fa249b7ae28fd62064083e, type: 3}
+  id_number_index:
+  - couch_1
+  - couch_2
+  - couch_3
+  - couch_4
+  - couch_5
+  - couch_6
+  - couch_7
+  - couch_8
 --- !u!1 &581441080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,8 +2037,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2055067865}
-        m_TargetAssemblyTypeName: AlertPanel, Assembly-CSharp
-        m_MethodName: OnExitButtonPressed
+        m_TargetAssemblyTypeName: CouchAlertPanel, Assembly-CSharp
+        m_MethodName: OnBackuttonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2024,63 +2086,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127181955}
   m_CullTransparentMesh: 1
---- !u!1001 &1162221329
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518617, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1506090537470518618, guid: 68e0387ddd938487a919052778c98c66, type: 3}
-      propertyPath: m_Name
-      value: Couch_1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 68e0387ddd938487a919052778c98c66, type: 3}
 --- !u!1 &1173398931
 GameObject:
   m_ObjectHideFlags: 0
@@ -2390,7 +2395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1439256034
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2633,7 +2638,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2055067865}
-        m_TargetAssemblyTypeName: AlertPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: CouchAlertPanel, Assembly-CSharp
         m_MethodName: OnNewButonPressed
         m_Mode: 1
         m_Arguments:
@@ -2854,6 +2859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20da46666da59471c99d33fb1398c456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heartObject: {fileID: 1439256033}
   lifeText: {fileID: 409913128}
   scoreText: {fileID: 2120621628}
   bestScoreText: {fileID: 281727256}
@@ -2861,6 +2867,7 @@ MonoBehaviour:
   shopPanel: {fileID: 1221178043}
   playButton: {fileID: 393958065}
   shopButton: {fileID: 581441082}
+  ballsBoard: {fileID: 2097968340}
   fullLife: 3
 --- !u!1 &1776998114
 GameObject:
@@ -3125,7 +3132,7 @@ GameObject:
   - component: {fileID: 2055067866}
   - component: {fileID: 2055067865}
   m_Layer: 5
-  m_Name: AlertPanel
+  m_Name: CouchAlertPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3162,7 +3169,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2055067863}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c107cb25d2f1b49189433815b4172478, type: 3}
+  m_Script: {fileID: 11500000, guid: 278dadca050c748a7af07f1bc28cb15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   alertText: {fileID: 56437785}

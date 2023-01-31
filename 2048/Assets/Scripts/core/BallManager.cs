@@ -67,7 +67,7 @@ public class BallManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0)) {
             drag = false;
             if (selectedBall != null) {
-                Debug.Log($"取消选中 {selectedBall.gameObject.name}({GetInstanceID()})");
+                //Debug.Log($"取消选中 {selectedBall.gameObject.name}({GetInstanceID()})");
                 selectedBall.GetComponent<SpringJoint2D>().enabled = false;
                 selectedBall.GetComponent<LineRenderer>().enabled = false;
                 selectedBall = null;
@@ -84,7 +84,7 @@ public class BallManager : MonoBehaviour
             currentPos.y = point.y;
             selectedBall.GetComponent<LineRenderer>().SetPosition(0, selectedBall.transform.position);
             selectedBall.GetComponent<LineRenderer>().SetPosition(1, currentPos);
-            Debug.Log($"更新划线({selectedBall.transform.position},{currentPos})");
+            //Debug.Log($"更新划线({selectedBall.transform.position},{currentPos})");
             // 设置弹簧, 链接Ball和当前位置
             Vector2 connectedAnchor = selectedBall.GetComponent<SpringJoint2D>().connectedAnchor;
             connectedAnchor.x = currentPos.x;
@@ -192,4 +192,6 @@ public class BallManager : MonoBehaviour
     public void StartGame() {
         Spawn();
     }
+
+    
 }

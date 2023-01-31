@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ShopConfiguration
-{
+public class ShopConfiguration {
 
     public List<IapItem> iapItems = new List<IapItem>();
 
-    public ShopConfiguration() {
-        //init();
+    void Awake()
+    {
+        
     }
 
     public void init() {
@@ -23,5 +23,17 @@ public class ShopConfiguration
         iapItems.Add(new IapItem("couch_7", 3499, IapItemStatusEnum.Locked));
         iapItems.Add(new IapItem("couch_8", 9999, IapItemStatusEnum.Locked));
         FileUtils.SaveJsonFile(Application.dataPath + "/Resources/Config/shop_configuration.json", this);
+    }
+
+    public void UpdateIapItem(IapItem item) {
+        iapItems.Find((IapItem obj) => item.itemId == obj.itemId).status = item.status;
+        FileUtils.SaveJsonFile(Application.dataPath + "/Resources/Config/shop_configuration.json", this);
+    }
+    /// <summary>
+    /// 获取当前选用的couch
+    /// </summary>
+    /// <returns></returns>
+    public IapItem GetCurrentCouch() {
+        return iapItems.Find(iapItem => iapItem.status == IapItemStatusEnum.Using);
     }
 }

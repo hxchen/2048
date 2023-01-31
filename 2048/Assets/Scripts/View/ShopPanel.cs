@@ -20,7 +20,7 @@ public class ShopPanel : MonoBehaviour
         shopConfiguration = FileUtils.LoadJsonFile<ShopConfiguration>(serializer, "Config/shop_configuration");
         if (shopConfiguration != null && shopConfiguration.iapItems.Count > 0) {
             foreach (IapItem item in shopConfiguration.iapItems) {
-                AddItemToItems(item);
+                UpdateItemUI(item);
             }
         }
         
@@ -37,7 +37,7 @@ public class ShopPanel : MonoBehaviour
     /// 添加商品到items组件
     /// </summary>
     /// <param name="item"></param>
-    public void AddItemToItems(IapItem item) {
+    public void UpdateItemUI(IapItem item) {
         GameObject gameObject = GameObject.Instantiate(couchIapPrefab, items.transform);
         gameObject.GetComponent<CouchIap>().SetItem(item);
     }

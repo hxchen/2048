@@ -9,19 +9,23 @@ public class BallMain : MonoBehaviour
     public static BallMain instance;
 
     #region UI
+    public GameObject heartObject;
+
     public Text lifeText;
 
     public Text scoreText;
 
     public Text bestScoreText;
 
-    public AlertPanel alertPanel;
+    public CouchAlertPanel alertPanel;
 
     public ShopPanel shopPanel;
 
     public Button playButton;
 
     public Button shopButton;
+
+    public GameObject ballsBoard;
 
     #endregion
 
@@ -105,8 +109,33 @@ public class BallMain : MonoBehaviour
     /// </summary>
     public void OnPlayButtonPressed() {
         Time.timeScale = 1f;
+        heartObject.gameObject.SetActive(true);
         playButton.gameObject.SetActive(false);
         shopButton.gameObject.SetActive(false);
         BallManager.instancs.StartGame();
+    }
+
+    /// <summary>
+    /// 重新开始游戏
+    /// </summary>
+    public void RestartGame() {
+        // 更新生命
+        lifeText.text = fullLife.ToString();
+        // 更新分数
+        score = 0;
+        scoreText.text = score.ToString();
+        // 清空球
+        ClearBalls();
+
+        OnPlayButtonPressed();
+    }
+
+    /// <summary>
+    /// 清除小球
+    /// </summary>
+    public void ClearBalls() {
+        for (int i = 0; i < ballsBoard.transform.childCount; i++) {
+            Destroy(ballsBoard.transform.GetChild(i).gameObject);
+        }
     }
 }

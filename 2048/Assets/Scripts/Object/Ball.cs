@@ -10,7 +10,7 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region 业务变量
-    public int initSize;
+    public float initSize;
 
     private float scale;
 
@@ -25,6 +25,8 @@ public class Ball : MonoBehaviour
     public Color[] num_Colors;
 
     public List<int> number_index;
+
+    public Sprite[] ballSprites;
 
     #endregion
 
@@ -51,9 +53,9 @@ public class Ball : MonoBehaviour
             BallManager.instancs.NeedNewBall();
 
         } else {
-            scale = initSize + Mathf.Log(GetNumber(), 2) / 2;
+            scale = initSize + Mathf.Log(GetNumber(), 2) / 20;
             transform.localScale = new Vector3(scale, scale, 1);
-            GetComponent<SpriteRenderer>().color = bg_Colors[number_index.IndexOf(GetNumber())];
+            GetComponent<SpriteRenderer>().sprite = ballSprites[number_index.IndexOf(GetNumber())];
             numberText.color = num_Colors[number_index.IndexOf(GetNumber())];
         }
     }
@@ -72,7 +74,7 @@ public class Ball : MonoBehaviour
             }
             
             if (GetNumber() == other.gameObject.GetComponent<Ball>().GetNumber()) {
-                Debug.Log($"发生碰撞,碰撞数字:{GetNumber()}, 位置, this:{transform.position}, other:{other.transform.position}");
+                //Debug.Log($"发生碰撞,碰撞数字:{GetNumber()}, 位置, this:{transform.position}, other:{other.transform.position}");
                 BallManager.instancs.MergeBalls(gameObject, other.gameObject);
 
             }
