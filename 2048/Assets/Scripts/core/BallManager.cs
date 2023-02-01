@@ -18,7 +18,10 @@ public class BallManager : MonoBehaviour
 
     public float strength = 30f;
 
-    private int totalBalls;
+    public int initNum = 2;
+
+    public int target = 2048;
+
 
     // 是否需要补充新球，需要的话，一秒钟后补充
     private bool needNewBall;
@@ -31,7 +34,6 @@ public class BallManager : MonoBehaviour
         float halfSreenHeight = Camera.main.orthographicSize;
         top = halfSreenHeight - 1;
 
-        totalBalls = 0;
         needNewBall = false;
         waitTime = 0;
     }
@@ -54,7 +56,7 @@ public class BallManager : MonoBehaviour
             drag = true;
             var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null && hit.collider.gameObject.CompareTag("Ball")) {
-                Debug.Log($"选中 {hit.collider.gameObject.name}({GetInstanceID()})");
+                //Debug.Log($"选中 {hit.collider.gameObject.name}({GetInstanceID()})");
                 selectedBall = hit.collider.gameObject;
 
                 selectedBall.GetComponent<SpringJoint2D>().enabled = true;
@@ -118,16 +120,7 @@ public class BallManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void ReplenishBall() {
-        //Debug.Log("开始补充一个新球");
-        totalBalls = ballsBoard.GetComponentsInChildren<Ball>().Length;
-        if (totalBalls <= 10) {
-
-            var ball = NewBall(new Vector3(0, top, 0));
-
-            //Debug.Log($"补充新球, ball1:{ball.transform.position}");
-        } else {
-            Debug.LogError("10个球了，不再生成新的了");
-        }
+        NewBall(new Vector3(0, top, 0));
     }
     /// <summary>
     /// 在指定位置生成一个球
@@ -137,7 +130,7 @@ public class BallManager : MonoBehaviour
         GameObject ball = Instantiate(ballPrefab, ballsBoard.transform.position, Quaternion.identity);
         ball.transform.SetParent(ballsBoard.transform);
         ball.transform.position = pos;
-        ball.GetComponent<Ball>().SetNumber(2);
+        ball.GetComponent<Ball>().SetNumber(initNum);
         ball.name = "ball_" + ball.GetComponent<Ball>().GetNumber();
         return ball;
     }
@@ -168,7 +161,10 @@ public class BallManager : MonoBehaviour
         //Spawn();
         //更新分数
         BallMain.instance.AddScore(newNumber);
-
+        // 判断胜利条件
+        if (newNumber >= target) {
+            GameObject.Find("GameUICanvas/BallMain").GetComponent<BallMain>().GameWin();
+        }
     }
     /// <summary>
     /// 重设状态

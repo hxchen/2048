@@ -3,7 +3,7 @@
         {
             "itemId": "couch_1",
             "price": 0,
-            "status": "Unlock"
+            "status": "Using"
         },
         {
             "itemId": "couch_2",
@@ -13,7 +13,7 @@
         {
             "itemId": "couch_3",
             "price": 1499,
-            "status": "Using"
+            "status": "Unlock"
         },
         {
             "itemId": "couch_4",
@@ -33,12 +33,12 @@
         {
             "itemId": "couch_7",
             "price": 3499,
-            "status": "Locked"
+            "status": "Unlock"
         },
         {
             "itemId": "couch_8",
             "price": 9999,
-            "status": "Locked"
+            "status": "Unlock"
         }
     ]
 }

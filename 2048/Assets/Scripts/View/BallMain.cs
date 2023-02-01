@@ -27,6 +27,7 @@ public class BallMain : MonoBehaviour
 
     public GameObject ballsBoard;
 
+
     #endregion
 
     #region 逻辑
@@ -34,12 +35,15 @@ public class BallMain : MonoBehaviour
 
     public int fullLife;
 
+    private int currentLife;
+
 
     #endregion
 
     void Awake() {
         instance = this;
-        lifeText.text = fullLife.ToString();
+        currentLife = fullLife;
+        lifeText.text = currentLife.ToString();
         bestScoreText.text = PlayerPrefs.GetInt(Const.BestScoreBall, 0).ToString();
     }
 
@@ -71,9 +75,9 @@ public class BallMain : MonoBehaviour
     /// </summary>
     /// <param name="value"></param>
     public void SubtractLife() {
-        fullLife--;
-        lifeText.text = fullLife.ToString();
-        if (fullLife == 0) {
+        currentLife--;
+        lifeText.text = currentLife.ToString();
+        if (currentLife == 0) {
             GameLose();
         }
         
@@ -120,7 +124,8 @@ public class BallMain : MonoBehaviour
     /// </summary>
     public void RestartGame() {
         // 更新生命
-        lifeText.text = fullLife.ToString();
+        currentLife = fullLife;
+        lifeText.text = currentLife.ToString();
         // 更新分数
         score = 0;
         scoreText.text = score.ToString();
