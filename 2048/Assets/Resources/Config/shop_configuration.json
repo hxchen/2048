@@ -38,7 +38,7 @@
         {
             "itemId": "couch_8",
             "price": 9999,
-            "status": "Unlock"
+            "status": "Using"
         }
     ]
 }

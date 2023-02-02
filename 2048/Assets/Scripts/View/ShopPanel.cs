@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class ShopPanel : MonoBehaviour
 {
     #region UI 组件
-    public Text coinsNumberText;
 
     public GameObject items;
 
@@ -23,7 +22,6 @@ public class ShopPanel : MonoBehaviour
                 UpdateItemUI(item);
             }
         }
-        
     }
     /// <summary>
     /// 商店关闭

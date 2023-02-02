@@ -11,13 +11,21 @@ public class BallMain : MonoBehaviour
     #region UI
     public GameObject heartObject;
 
+    public GameObject coinsObject;
+
+    public GameObject scoreObject;
+
     public Text lifeText;
+
+    public Text coinsNumberText;
 
     public Text scoreText;
 
     public Text bestScoreText;
 
-    public CouchAlertPanel alertPanel;
+    public GameOverPanel gameOverPanel;
+
+    public WinPanel winPanel;
 
     public ShopPanel shopPanel;
 
@@ -31,11 +39,14 @@ public class BallMain : MonoBehaviour
     #endregion
 
     #region 逻辑
+    private int coinsNumber;
+
     private int score;
 
     public int fullLife;
 
     private int currentLife;
+    
 
 
     #endregion
@@ -45,6 +56,9 @@ public class BallMain : MonoBehaviour
         currentLife = fullLife;
         lifeText.text = currentLife.ToString();
         bestScoreText.text = PlayerPrefs.GetInt(Const.BestScoreBall, 0).ToString();
+        coinsNumber = PlayerPrefs.GetInt(Const.CouchCoins, 0);
+        coinsNumberText.text = coinsNumber.ToString();
+        UIInDefaultModel();
     }
 
     /// <summary>
@@ -71,6 +85,63 @@ public class BallMain : MonoBehaviour
     }
 
     /// <summary>
+    /// 添加金币
+    /// </summary>
+    /// <param name="value"></param>
+    public void AddCoins(int value) {
+        coinsNumber += value;
+        coinsNumberText.text = coinsNumber.ToString();
+        PlayerPrefs.SetInt(Const.CouchCoins, coinsNumber);
+    }
+
+    /// <summary>
+    /// 扣除金币
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool SubtractCoins(int value) {
+        if (value > coinsNumber) {
+            return false;
+        } else {
+            coinsNumber -= value;
+            coinsNumberText.text = coinsNumber.ToString();
+            PlayerPrefs.SetInt(Const.CouchCoins, coinsNumber);
+            return true;
+        }
+    }
+
+    public void ShowCoin(Text coinText, int coinValue, int changeCount = 10, float spaceTime = 0.1f)
+    ｛
+        StopAllCoroutines();
+    StartCoroutine(ShowCoinAni(coinText, coinValue, changeCount, spaceTime));
+    ｝
+    IEnumerator ShowCoinAni(Text coinText, int coinValue, int changeCount, float spaceTime)
+    ｛
+        float lastGoldCount = 0;
+        if (!string.IsNullOrEmpty(coinText.text))
+        ｛
+            try
+            ｛
+                lastGoldCount = System.Convert.ToInt32(coinText.text);
+            ｝
+            catch(System.Exception e)
+            ｛
+                Debug.Log(e);
+            ｝
+        ｝
+        float onceAddCount = 1.0f / changeCount * (coinValue - lastGoldCount);
+    int i = 0;
+        while (i<changeCount)
+        ｛
+            i++;
+            lastGoldCount += onceAddCount;
+            coinText.text = ((int) lastGoldCount).ToString();
+    yield return new WaitForSeconds(spaceTime);
+        ｝
+        coinText.text = coinValue.ToString();
+    ｝
+
+    /// <summary>
     /// 更新生命
     /// </summary>
     /// <param name="value"></param>
@@ -87,8 +158,8 @@ public class BallMain : MonoBehaviour
     /// 显示胜利UI
     /// </summary>
     public void GameWin() {
-        alertPanel.setAlertText("You Win!");
-        alertPanel.Show();
+        winPanel.Show();
+        BallManager.instancs.NeedNewBall(false);
     }
 
     /// <summary>
@@ -96,15 +167,14 @@ public class BallMain : MonoBehaviour
     /// </summary>
     public void GameLose() {
         Time.timeScale = 0f;
-        alertPanel.setAlertText("Game Over!");
-        alertPanel.Show();
+        gameOverPanel.Show();
+        AddCoins(gameOverPanel.loseCoins);
     }
 
     /// <summary>
     /// Shop按钮
     /// </summary>
     public void OnShopButtonPressed() {
-        Debug.Log("打开商店");
         shopPanel.gameObject.SetActive(true);
     }
 
@@ -113,9 +183,7 @@ public class BallMain : MonoBehaviour
     /// </summary>
     public void OnPlayButtonPressed() {
         Time.timeScale = 1f;
-        heartObject.gameObject.SetActive(true);
-        playButton.gameObject.SetActive(false);
-        shopButton.gameObject.SetActive(false);
+        UIInPlayModel();
         BallManager.instancs.StartGame();
     }
 
@@ -143,4 +211,30 @@ public class BallMain : MonoBehaviour
             Destroy(ballsBoard.transform.GetChild(i).gameObject);
         }
     }
+
+    /// <summary>
+    /// 游戏模式下的UI显示控制
+    /// </summary>
+    public void UIInPlayModel() {
+        coinsObject.SetActive(false);
+        heartObject.SetActive(true);
+        scoreObject.SetActive(true);
+        shopButton.gameObject.SetActive(false);
+        playButton.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 默认下的UI显示控制
+    /// </summary>
+    public void UIInDefaultModel() {
+        coinsObject.SetActive(true);
+        heartObject.SetActive(false);
+        scoreObject.SetActive(false);
+        shopButton.gameObject.SetActive(true);
+        playButton.gameObject.SetActive(true);
+
+        ClearBalls();
+    }
+
+
 }

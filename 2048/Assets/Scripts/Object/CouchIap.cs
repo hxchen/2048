@@ -51,8 +51,11 @@ public class CouchIap : MonoBehaviour
         switch (iapItem.status){
             case IapItemStatusEnum.Locked:
                 // 没有解锁的进行解锁
-                // TODO 扣除金币
-                Debug.Log("TODO :扣除金币");
+                // 扣除金币
+                bool subtractCoinsRet = GameObject.Find("GameUICanvas/BallMain").GetComponent<BallMain>().SubtractCoins(iapItem.price);
+                if (!subtractCoinsRet) {
+                    return;
+                }
                 iapItem.status = IapItemStatusEnum.Unlock;
                 buttonText.text = "Use";
                 shopConfiguration.UpdateIapItem(iapItem);
@@ -77,7 +80,5 @@ public class CouchIap : MonoBehaviour
 
         }
     }
-
-
 
 }

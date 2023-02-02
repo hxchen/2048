@@ -50,7 +50,7 @@ public class Ball : MonoBehaviour
         if (transform.position.x < leftEdge || transform.position.x > rightEdge || transform.position.y < bottomEdge) {
             Destroy(gameObject);
             BallMain.instance.SubtractLife();
-            BallManager.instancs.NeedNewBall();
+            BallManager.instancs.NeedNewBall(true);
 
         } else {
             scale = initSize + Mathf.Log(GetNumber(), 2) / 20;

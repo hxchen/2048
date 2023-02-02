@@ -22,11 +22,12 @@ public class BallManager : MonoBehaviour
 
     public int target = 2048;
 
-
     // 是否需要补充新球，需要的话，一秒钟后补充
     private bool needNewBall;
 
     private float waitTime;
+
+    private GameStatus gameStatus;
 
     public void Awake() {
         instancs = this;
@@ -39,11 +40,13 @@ public class BallManager : MonoBehaviour
     }
 
     public void Update() {
-        HandleInput();
-        if (needNewBall) {
-            waitTime += Time.deltaTime;
-            if (waitTime > 1.5f) {
-                Spawn();
+        if (GameStatus.Play == gameStatus) {
+            HandleInput();
+            if (needNewBall) {
+                waitTime += Time.deltaTime;
+                if (waitTime > 1.5f) {
+                    Spawn();
+                }
             }
         }
     }
@@ -157,12 +160,13 @@ public class BallManager : MonoBehaviour
         newBall.name = "ball_" + newBall.GetComponent<Ball>().GetNumber();
         //Debug.Log($"合并出新球, number:{newNumber}, position:{newBall.transform.position}");
         // 生成新球
-        NeedNewBall();
+        NeedNewBall(true);
         //Spawn();
         //更新分数
         BallMain.instance.AddScore(newNumber);
         // 判断胜利条件
         if (newNumber >= target) {
+            gameStatus = GameStatus.Hang;
             GameObject.Find("GameUICanvas/BallMain").GetComponent<BallMain>().GameWin();
         }
     }
@@ -178,14 +182,15 @@ public class BallManager : MonoBehaviour
     /// <summary>
     /// 设置需要产生新球
     /// </summary>
-    public void NeedNewBall() {
-        needNewBall = true;
+    public void NeedNewBall(bool need) {
+        needNewBall = need;
     }
 
     /// <summary>
     /// 开始
     /// </summary>
     public void StartGame() {
+        gameStatus = GameStatus.Play;
         Spawn();
     }
 
