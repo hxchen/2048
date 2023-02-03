@@ -1617,9 +1617,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd3766553fc1149678268422f2cb8ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _androidGameId: 5134349
-  _iOSGameId: 5134348
-  _testMode: 1
+  adsTestMode: 0
+  androidGameId: 5134349
+  iOSGameId: 5134348
+  adUnitIdAndroid: Rewarded_Android
+  adUnitIdiOS: Rewarded_iOS
 --- !u!114 &644808886
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ public class BallManager : MonoBehaviour
 
     private float waitTime;
 
-    private GameStatus gameStatus;
+    private GameState gameState;
 
     public void Awake() {
         instancs = this;
@@ -40,7 +40,7 @@ public class BallManager : MonoBehaviour
     }
 
     public void Update() {
-        if (GameStatus.Play == gameStatus) {
+        if (GameState.Play == gameState) {
             HandleInput();
             if (needNewBall) {
                 waitTime += Time.deltaTime;
@@ -108,9 +108,14 @@ public class BallManager : MonoBehaviour
     /// 生成2个球
     /// </summary>
     private void Spawn() {
-
-        var ball1 = NewBall(new Vector3(-1, top, 0));
-        var ball2 = NewBall(new Vector3(1, top, 0));
+        int index = Random.Range(0, 1);
+        if (index == 0) {
+            var ball1 = NewBall(new Vector3(-1, top, 0), initNum);
+            var ball2 = NewBall(new Vector3(1, top, 0), initNum);
+        } else {
+            NewBall(new Vector3(0, top, 0), initNum * 2);
+        }
+        
         //重设状态
         needNewBall = false;
         waitTime = 0;
@@ -123,17 +128,17 @@ public class BallManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void ReplenishBall() {
-        NewBall(new Vector3(0, top, 0));
+        NewBall(new Vector3(0, top, 0), initNum);
     }
     /// <summary>
     /// 在指定位置生成一个球
     /// </summary>
     /// <param name="pos"></param>
-    private GameObject NewBall(Vector3 pos) {
+    private GameObject NewBall(Vector3 pos, int number) {
         GameObject ball = Instantiate(ballPrefab, ballsBoard.transform.position, Quaternion.identity);
         ball.transform.SetParent(ballsBoard.transform);
         ball.transform.position = pos;
-        ball.GetComponent<Ball>().SetNumber(initNum);
+        ball.GetComponent<Ball>().SetNumber(number);
         ball.name = "ball_" + ball.GetComponent<Ball>().GetNumber();
         return ball;
     }
@@ -153,6 +158,10 @@ public class BallManager : MonoBehaviour
         // 销毁旧球
         Destroy(ball);
         Destroy(other);
+        // 播放声音
+        if (SoundManager.instance) {
+            SoundManager.instance.PlaySound();
+        }
         //生成新球
         GameObject newBall = Instantiate(ballPrefab, newPos, Quaternion.identity);
         newBall.transform.SetParent(ballsBoard.transform);
@@ -166,7 +175,7 @@ public class BallManager : MonoBehaviour
         BallMain.instance.AddScore(newNumber);
         // 判断胜利条件
         if (newNumber >= target) {
-            gameStatus = GameStatus.Hang;
+            gameState = GameState.Hang;
             GameObject.Find("GameUICanvas/BallMain").GetComponent<BallMain>().GameWin();
         }
     }
@@ -179,6 +188,9 @@ public class BallManager : MonoBehaviour
         selectedBall = null;
     }
 
+    public void SetGameState(GameState state) {
+        gameState = state;
+    }
     /// <summary>
     /// 设置需要产生新球
     /// </summary>
@@ -190,7 +202,7 @@ public class BallManager : MonoBehaviour
     /// 开始
     /// </summary>
     public void StartGame() {
-        gameStatus = GameStatus.Play;
+        gameState = GameState.Play;
         Spawn();
     }
 
