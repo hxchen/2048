@@ -4888,7 +4888,7 @@ MonoBehaviour:
   maxAnimDuration: 0.9
   easeTYpe: 28
   spreed: 0.2
-  fullLife: 3
+  fullLife: 9
 --- !u!1 &1731018801
 GameObject:
   m_ObjectHideFlags: 0

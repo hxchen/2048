@@ -13,7 +13,7 @@ public class Const
     // 金币数量
     public const string CouchCoins = "couch_coins";
     // 看一次广告可以 +X 个次数
-    public const int AdsRewardsForLife = 3;
+    public const int AdsRewardsForLife = 9;
     // 可以看几次广告来加次数
     public const int AdsRewardsForLifeTimes = 3;
     // 获胜一次奖励金币数量

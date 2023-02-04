@@ -188,16 +188,16 @@ public class BallMain : MonoBehaviour {
     /// <param name="value"></param>
     public void SubtractLife() {
         currentLife--;
-        lifeText.text = currentLife.ToString();
         if (currentLife <= 0) {
             if (currentTimesOfAddingChances > 0) {
                 NowMoreChances();
             } else {
                 GameLose();
             }
-            
         }
-        
+        currentLife = currentLife < 0 ? 0 : currentLife;
+        lifeText.text = currentLife.ToString();
+
     }
 
     /// <summary>
@@ -262,6 +262,8 @@ public class BallMain : MonoBehaviour {
         // 更新分数
         score = 0;
         scoreText.text = score.ToString();
+        // 更新看广告次数
+        currentTimesOfAddingChances = Const.AdsRewardsForLifeTimes;
         // 清空球
         ClearBalls();
         BallManager.instancs.StartGame();
