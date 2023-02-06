@@ -39,6 +39,8 @@ public class BallMain : MonoBehaviour {
 
     [SerializeField] Button homeButton;
 
+    [SerializeField] Button exitButton;
+
     [SerializeField] GameObject ballsBoard;
 
     [SerializeField] GameObject animatedCoinPrefab;
@@ -75,6 +77,9 @@ public class BallMain : MonoBehaviour {
 
     private int currentTimesOfAddingChances;
 
+    [Header("Init Coins")]
+    public int initCoins;
+
     #endregion
 
     void Awake() {
@@ -83,7 +88,13 @@ public class BallMain : MonoBehaviour {
         currentTimesOfAddingChances = Const.AdsRewardsForLifeTimes;
         lifeText.text = currentLife.ToString();
         bestScoreText.text = PlayerPrefs.GetInt(Const.BestScoreBall, 0).ToString();
-        coinsNumber = PlayerPrefs.GetInt(Const.CouchCoins, 0);
+        // 初始化金币
+        if (PlayerPrefs.HasKey(Const.CouchCoins)) {
+            coinsNumber = PlayerPrefs.GetInt(Const.CouchCoins);
+        } else {
+            coinsNumber = initCoins;
+            PlayerPrefs.SetInt(Const.CouchCoins, coinsNumber);
+        }
         coinsNumberText.text = coinsNumber.ToString();
         UIInDefaultModel();
         targetCoinsPosition = coinsObject.transform.position;
@@ -105,27 +116,38 @@ public class BallMain : MonoBehaviour {
     }
 
     /// <summary>
+    /// 获得一个金币，优先从池里取，池里没有就新建
+    /// </summary>
+    private GameObject GetCoinObject() {
+        GameObject coin;
+        if (coinsQueue.Count > 0) {
+            coin = coinsQueue.Dequeue();
+        } else {
+            coin = Instantiate(animatedCoinPrefab);
+            coin.transform.parent = coinsContainer.transform;
+            coin.SetActive(false);
+        }
+        return coin;
+    }
+
+    /// <summary>
     /// 飞金币动画
     /// </summary>
     /// <param name="collectedCoinsPostion"></param>
     /// <param name="amount"></param>
     void PlayAnimateCoin(Vector3 collectedCoinsPostion, int amount) {
         for (int i = 0; i < amount; i++) {
-            if (coinsQueue.Count > 0) {
-                GameObject coin = coinsQueue.Dequeue();
-                coin.SetActive(true);
-                coin.transform.position = collectedCoinsPostion + new Vector3(Random.Range(-spreed, spreed), 0f, 0f);
-                float duration = Random.Range(minAnimDuration, maxAnimDuration);
-                coin.transform.DOMove(targetCoinsPosition, duration)
-                    .SetEase(easeTYpe)
-                    .OnComplete(() => {
-                        coin.SetActive(false);
-                        coinsQueue.Enqueue(coin);
-                        coinsNumberText.text = (int.Parse(coinsNumberText.text) + 1).ToString();
-                    });
-            } else {
-                Debug.Log("金币实体数量不足");
-            }
+            GameObject coin = GetCoinObject();
+            coin.SetActive(true);
+            coin.transform.position = collectedCoinsPostion + new Vector3(Random.Range(-spreed, spreed), 0f, 0f);
+            float duration = Random.Range(minAnimDuration, maxAnimDuration);
+            coin.transform.DOMove(targetCoinsPosition, duration)
+                .SetEase(easeTYpe)
+                .OnComplete(() => {
+                    coin.SetActive(false);
+                    coinsQueue.Enqueue(coin);
+                    coinsNumberText.text = (int.Parse(coinsNumberText.text) + 1).ToString();
+                });
         }
         
     }
@@ -277,6 +299,15 @@ public class BallMain : MonoBehaviour {
     }
 
     /// <summary>
+    /// 退出到游戏开始
+    /// </summary>
+    public void OnExitButtonPressed() {
+        BallManager.instancs.SetGameState(GameState.Hang);
+        BallManager.instancs.NeedNewBall(false);
+        UIInDefaultModel();
+    }
+
+    /// <summary>
     /// 清除小球
     /// </summary>
     public void ClearBalls() {
@@ -292,6 +323,7 @@ public class BallMain : MonoBehaviour {
         coinsObject.SetActive(false);
         heartObject.SetActive(true);
         scoreObject.SetActive(true);
+        exitButton.gameObject.SetActive(true);
         shopButton.gameObject.SetActive(false);
         playButton.gameObject.SetActive(false);
         homeButton.gameObject.SetActive(false);
@@ -304,6 +336,7 @@ public class BallMain : MonoBehaviour {
         coinsObject.SetActive(true);
         heartObject.SetActive(false);
         scoreObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
         shopButton.gameObject.SetActive(true);
         playButton.gameObject.SetActive(true);
         homeButton.gameObject.SetActive(true);

@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
 
         PlayBgm();
 
-        instance.bgmAudioSource.volume = PlayerPrefs.GetFloat(Const.Music, 0f);
+        instance.bgmAudioSource.volume = PlayerPrefs.GetFloat(Const.Music, 0.5f);
         instance.mergeAudioSource.volume = PlayerPrefs.GetFloat(Const.Sound, 0.5f);
     }
     /// <summary>

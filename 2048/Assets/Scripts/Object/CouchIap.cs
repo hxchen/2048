@@ -44,9 +44,7 @@ public class CouchIap : MonoBehaviour
     /// 按照状态变化：Locked(显示Unlock) -> Unlock(显示Use) -> Using
     /// </summary>
     public void OnBuyButtonPressed() {
-        Debug.Log($"购买:{iapItem}");
         var serializer = new fsSerializer();
-        var shopConfiguration = FileUtils.LoadJsonFile<ShopConfiguration>(serializer, "Config/shop_configuration");
 
         switch (iapItem.status){
             case IapItemStatusEnum.Locked:
@@ -58,7 +56,7 @@ public class CouchIap : MonoBehaviour
                 }
                 iapItem.status = IapItemStatusEnum.Unlock;
                 buttonText.text = "Use";
-                shopConfiguration.UpdateIapItem(iapItem);
+                CouchManager.instance.UpdateIapItem(iapItem);
                 break;
             case IapItemStatusEnum.Unlock:
                 // 1.查找在使用的变为已解锁 using -> unlock
@@ -67,14 +65,14 @@ public class CouchIap : MonoBehaviour
                     if (couchIap.iapItem.status == IapItemStatusEnum.Using) {
                         couchIap.iapItem.status = IapItemStatusEnum.Unlock;
                         couchIap.buttonText.text = "Use";
-                        shopConfiguration.UpdateIapItem(couchIap.iapItem);
+                        CouchManager.instance.UpdateIapItem(couchIap.iapItem);
                     }
                 }
                 // 2.解锁过的变为使用
                 Debug.Log("TODO :保存为使用中");
                 iapItem.status = IapItemStatusEnum.Using;
                 buttonText.text = "Using";
-                shopConfiguration.UpdateIapItem(iapItem);
+                CouchManager.instance.UpdateIapItem(iapItem);
                 CouchManager.instance.CreateCouchByItemId(iapItem.itemId);
                 break;
 

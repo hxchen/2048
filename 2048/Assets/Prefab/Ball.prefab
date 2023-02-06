@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberText: {fileID: 8112709309749249677}
-  initSize: 0.5
+  initSize: 0.3
   bg_Colors:
   - {r: 0.93333334, g: 0.89411765, b: 0.854902, a: 1}
   - {r: 0.9294118, g: 0.87843144, b: 0.7843138, a: 1}

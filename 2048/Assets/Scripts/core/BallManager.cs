@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BallManager : MonoBehaviour
@@ -22,12 +23,16 @@ public class BallManager : MonoBehaviour
 
     public int target = 2048;
 
+    public int sizeOfBallsPool = 32;
+
     // 是否需要补充新球，需要的话，一秒钟后补充
     private bool needNewBall;
 
     private float waitTime;
 
     private GameState gameState;
+    // 球池
+    Queue<GameObject> ballsPool = new Queue<GameObject>();
 
     public void Awake() {
         instancs = this;
@@ -37,6 +42,8 @@ public class BallManager : MonoBehaviour
 
         needNewBall = false;
         waitTime = 0;
+
+        PrepareBalls();
     }
 
     public void Update() {
@@ -48,6 +55,19 @@ public class BallManager : MonoBehaviour
                     Spawn();
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// 产生球并放入缓存池
+    /// </summary>
+    private void PrepareBalls() {
+        GameObject ball;
+        for (int i = 0; i < sizeOfBallsPool; i++) {
+            ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+            ball.SetActive(false);
+            ball.transform.SetParent(transform);
+            ballsPool.Enqueue(ball);
         }
     }
 
@@ -107,22 +127,19 @@ public class BallManager : MonoBehaviour
     /// <summary>
     /// 生成2个球
     /// </summary>
-    private void Spawn() {
-        int index = Random.Range(0, 1);
-        if (index == 0) {
-            var ball1 = NewBall(new Vector3(-1, top, 0), initNum);
-            var ball2 = NewBall(new Vector3(1, top, 0), initNum);
-        } else {
+    private void Spawn(bool useProbability = false) {
+        int index = Random.Range(0, 2);
+        if (useProbability && index == 1) {
             NewBall(new Vector3(0, top, 0), initNum * 2);
+        } else {
+            NewBall(new Vector3(-1, top, 0), initNum);
+            NewBall(new Vector3(1, top, 0), initNum);
         }
-        
         //重设状态
         needNewBall = false;
         waitTime = 0;
-
-        //Debug.Log($"掉落新球, ball1{ball1.GetInstanceID()}:{ball1.transform.position}, ball2{ball2.GetInstanceID()}:{ball2.transform.position}");
-       
     }
+
     /// <summary>
     /// 扔掉一个球后，掉一个补充球
     /// </summary>
@@ -130,12 +147,20 @@ public class BallManager : MonoBehaviour
     public void ReplenishBall() {
         NewBall(new Vector3(0, top, 0), initNum);
     }
+
     /// <summary>
     /// 在指定位置生成一个球
     /// </summary>
     /// <param name="pos"></param>
     private GameObject NewBall(Vector3 pos, int number) {
-        GameObject ball = Instantiate(ballPrefab, ballsBoard.transform.position, Quaternion.identity);
+        
+        GameObject ball;
+        if (ballsPool.Count > 0) {
+            ball = ballsPool.Dequeue();
+        } else {
+            ball =  Instantiate(ballPrefab, transform.position, Quaternion.identity);
+        }
+        ball.SetActive(true);
         ball.transform.SetParent(ballsBoard.transform);
         ball.transform.position = pos;
         ball.GetComponent<Ball>().SetNumber(number);
@@ -155,17 +180,17 @@ public class BallManager : MonoBehaviour
         if (selectedBall == ball || selectedBall == other) {
             selectedBall = null;
         }
-        // 销毁旧球
-        Destroy(ball);
-        Destroy(other);
+        // 回收旧球
+        RecycleBallsl(ball);
+        RecycleBallsl(other);
         // 播放声音
         if (SoundManager.instance) {
             SoundManager.instance.PlaySound();
         }
         //生成新球
-        GameObject newBall = Instantiate(ballPrefab, newPos, Quaternion.identity);
+        GameObject newBall = NewBall(newPos, newNumber);
         newBall.transform.SetParent(ballsBoard.transform);
-        newBall.GetComponent<Ball>().SetNumber(newNumber);
+        //newBall.GetComponent<Ball>().SetNumber(newNumber);
         newBall.name = "ball_" + newBall.GetComponent<Ball>().GetNumber();
         //Debug.Log($"合并出新球, number:{newNumber}, position:{newBall.transform.position}");
         // 生成新球
@@ -206,5 +231,16 @@ public class BallManager : MonoBehaviour
         Spawn();
     }
 
+    /// <summary>
+    /// 回收球
+    /// </summary>
+    public void RecycleBallsl(GameObject ball) {
+        //Debug.Log($"回收球, 池子大小：{ballsPool.Count}");
+        ball.SetActive(false);
+        ballsPool.Enqueue(ball);
+        ball.transform.SetParent(transform);
+        ball.GetComponent<SpringJoint2D>().enabled = false;
+        ball.GetComponent<LineRenderer>().enabled = false;
+    }
     
 }

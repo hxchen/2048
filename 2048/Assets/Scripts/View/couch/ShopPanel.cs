@@ -11,16 +11,11 @@ public class ShopPanel : View
     public GameObject couchIapPrefab;
     #endregion
 
-    private ShopConfiguration shopConfiguration;
-
 
     void Awake() {
-        var serializer = new fsSerializer();
-        shopConfiguration = FileUtils.LoadJsonFile<ShopConfiguration>(serializer, "Config/shop_configuration");
-        if (shopConfiguration != null && shopConfiguration.iapItems.Count > 0) {
-            foreach (IapItem item in shopConfiguration.iapItems) {
-                UpdateItemUI(item);
-            }
+        var items = CouchManager.instance.GetIapItems();
+        foreach (IapItem item in items) {
+            UpdateItemUI(item);
         }
     }
 
@@ -32,4 +27,6 @@ public class ShopPanel : View
         GameObject gameObject = GameObject.Instantiate(couchIapPrefab, items.transform);
         gameObject.GetComponent<CouchIap>().SetItem(item);
     }
+
+    
 }

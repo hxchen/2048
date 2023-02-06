@@ -1,14 +1,28 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - AdsConfiguration
     - AlertPanel
+    - Ball
+    - BallMain
+    - BallManager
+    - ContinuePanel
+    - CouchIap
+    - CouchManager
     - GameBoard
+    - GameOverPanel
+    - InterstitialAd
     - MenuPanel
     - Number
     - SelectModelPanel
     - SettingsPanel
+    - ShopPanel
+    - SideCollider
     - SoundManager
     - Tile
+    - WinPanel
+    DOTween.dll:
+    - DG.Tweening.Core.DOTweenSettings
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.TextMeshPro.dll:
@@ -16,10 +30,22 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshPro
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.Advertisements.dll:
+    - UnityEngine.Advertisements.Placeholder
+    - UnityEngine.Advertisements.Platform.Editor.BannerPlaceholder
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.EventTrigger
@@ -29,8 +55,11 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.GridLayoutGroup
     - UnityEngine.UI.Image
+    - UnityEngine.UI.Mask
+    - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
+    - UnityEngine.UI.VerticalLayoutGroup
   sceneClasses:
     Assets/Scenes/01-menu.unity:
     - Class: 1
@@ -58,39 +87,45 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1472}
+      Script: {instanceID: 1508}
     - Class: 114
-      Script: {instanceID: 1666}
+      Script: {instanceID: 1724}
     - Class: 114
-      Script: {instanceID: 1746}
+      Script: {instanceID: 1818}
     - Class: 114
-      Script: {instanceID: 1962}
+      Script: {instanceID: 2078}
     - Class: 114
-      Script: {instanceID: 2028}
+      Script: {instanceID: 2152}
     - Class: 114
-      Script: {instanceID: 2038}
+      Script: {instanceID: 2162}
     - Class: 114
-      Script: {instanceID: 2324}
+      Script: {instanceID: 2504}
     - Class: 114
-      Script: {instanceID: 2336}
+      Script: {instanceID: 2518}
     - Class: 114
-      Script: {instanceID: 2438}
+      Script: {instanceID: 2632}
     - Class: 114
-      Script: {instanceID: 2604}
+      Script: {instanceID: 2836}
     - Class: 114
-      Script: {instanceID: 2786}
+      Script: {instanceID: 2942}
     - Class: 114
-      Script: {instanceID: 2872}
+      Script: {instanceID: 3028}
     - Class: 114
-      Script: {instanceID: 3402}
+      Script: {instanceID: 3048}
     - Class: 114
-      Script: {instanceID: 3822}
+      Script: {instanceID: 3154}
     - Class: 114
-      Script: {instanceID: 3988}
+      Script: {instanceID: 3774}
     - Class: 114
-      Script: {instanceID: 4004}
+      Script: {instanceID: 4248}
     - Class: 114
-      Script: {instanceID: 4088}
+      Script: {instanceID: 4444}
+    - Class: 114
+      Script: {instanceID: 4462}
+    - Class: 114
+      Script: {instanceID: 4552}
+    - Class: 114
+      Script: {instanceID: 5026}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -127,31 +162,31 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1472}
+      Script: {instanceID: 1508}
     - Class: 114
-      Script: {instanceID: 1506}
+      Script: {instanceID: 1542}
     - Class: 114
-      Script: {instanceID: 2038}
+      Script: {instanceID: 2162}
     - Class: 114
-      Script: {instanceID: 2324}
+      Script: {instanceID: 2504}
     - Class: 114
-      Script: {instanceID: 2438}
+      Script: {instanceID: 2632}
     - Class: 114
-      Script: {instanceID: 2604}
+      Script: {instanceID: 2836}
     - Class: 114
-      Script: {instanceID: 2786}
+      Script: {instanceID: 3048}
     - Class: 114
-      Script: {instanceID: 2872}
+      Script: {instanceID: 3154}
     - Class: 114
-      Script: {instanceID: 3042}
+      Script: {instanceID: 3354}
     - Class: 114
-      Script: {instanceID: 3252}
+      Script: {instanceID: 3606}
     - Class: 114
-      Script: {instanceID: 3342}
+      Script: {instanceID: 3708}
     - Class: 114
-      Script: {instanceID: 3402}
+      Script: {instanceID: 3774}
     - Class: 114
-      Script: {instanceID: 4420}
+      Script: {instanceID: 4936}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -167,6 +202,109 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/03-couch.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 50
+      Script: {instanceID: 0}
+    - Class: 58
+      Script: {instanceID: 0}
+    - Class: 60
+      Script: {instanceID: 0}
+    - Class: 61
+      Script: {instanceID: 0}
+    - Class: 62
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1508}
+    - Class: 114
+      Script: {instanceID: 1818}
+    - Class: 114
+      Script: {instanceID: 1994}
+    - Class: 114
+      Script: {instanceID: 2162}
+    - Class: 114
+      Script: {instanceID: 2504}
+    - Class: 114
+      Script: {instanceID: 2632}
+    - Class: 114
+      Script: {instanceID: 2788}
+    - Class: 114
+      Script: {instanceID: 2836}
+    - Class: 114
+      Script: {instanceID: 3048}
+    - Class: 114
+      Script: {instanceID: 3136}
+    - Class: 114
+      Script: {instanceID: 3154}
+    - Class: 114
+      Script: {instanceID: 3342}
+    - Class: 114
+      Script: {instanceID: 3454}
+    - Class: 114
+      Script: {instanceID: 3526}
+    - Class: 114
+      Script: {instanceID: 3558}
+    - Class: 114
+      Script: {instanceID: 3624}
+    - Class: 114
+      Script: {instanceID: 3996}
+    - Class: 114
+      Script: {instanceID: 4090}
+    - Class: 114
+      Script: {instanceID: 4142}
+    - Class: 114
+      Script: {instanceID: 4636}
+    - Class: 114
+      Script: {instanceID: 4828}
+    - Class: 114
+      Script: {instanceID: 4838}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 231
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -243,6 +381,18 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
+      Hash: 3e5b91bf2fdf8a6f054b362fce1d0012
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: FullSerializer
+    className: fsAotConfiguration
+  - hash:
+      serializedVersion: 2
+      Hash: 1af0b65eba9c47418ed9c209b6920ae6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WinPanel
+  - hash:
+      serializedVersion: 2
       Hash: 5fe5ffe694de2c3b72dda25fde01189e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -267,7 +417,7 @@ ScriptsOnlyBuild:
     className: Text
   - hash:
       serializedVersion: 2
-      Hash: f1d735cc1a21c3704ab52568f4fbfcf8
+      Hash: 4de78781075c75589cdbaad292fb6cff
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner
     className: PlaymodeTestsController
@@ -277,6 +427,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: RawImage
+  - hash:
+      serializedVersion: 2
+      Hash: a325152ad9563ed900af221c132fea36
+    assemblyName: UnityEngine.Advertisements.dll
+    namespaceName: UnityEngine.Advertisements.Utilities
+    className: CoroutineExecutor
   - hash:
       serializedVersion: 2
       Hash: a1aa98c78061c6f03a8c124cda576e67
@@ -327,6 +483,18 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
+      Hash: 4f775d42015d6e27c72025de5dcead41
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShopPanel
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: UnityEngine.Advertisements.dll
+    namespaceName: UnityEngine.Advertisements
+    className: Placeholder
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestRunner.Utils
@@ -361,6 +529,24 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: TestResultRendererCallback
+  - hash:
+      serializedVersion: 2
+      Hash: 704dcd31abc789439bc3f3cd10b58c2b
+    assemblyName: DOTween.dll
+    namespaceName: DG.Tweening.Core
+    className: DOTweenComponent
+  - hash:
+      serializedVersion: 2
+      Hash: 23206d8cacf2b6e30fd52e948d6c73f5
+    assemblyName: DOTween.dll
+    namespaceName: DG.Tweening.Core
+    className: DOTweenSettings
+  - hash:
+      serializedVersion: 2
+      Hash: 1f1b989ac933717e8b617c64cad3c6cc
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: InterstitialAd
   - hash:
       serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
@@ -399,6 +585,12 @@ ScriptsOnlyBuild:
     className: ToggleGroup
   - hash:
       serializedVersion: 2
+      Hash: 5660ef1ae60b1366f58124fd9a693cb6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Ball
+  - hash:
+      serializedVersion: 2
       Hash: 69415240821be7986b27e72bf9609a30
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -415,6 +607,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: ContentSizeFitter
+  - hash:
+      serializedVersion: 2
+      Hash: 1c19a1bc9a50e26543a4d580dbf4eaf9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GameOverPanel
   - hash:
       serializedVersion: 2
       Hash: 1e7b140cbd9b26480ea0945e2b6e5a99
@@ -448,6 +646,12 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: UnityEngine.Advertisements.dll
+    namespaceName: UnityEngine.Advertisements.Utilities
+    className: ApplicationQuit
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: PlayerQuitHandler
@@ -457,6 +661,24 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: BaseInput
+  - hash:
+      serializedVersion: 2
+      Hash: 88e2c6f501bf5dead831a3e44c30de40
+    assemblyName: UnityEngine.Advertisements.dll
+    namespaceName: UnityEngine.Advertisements.Platform.Editor
+    className: BannerPlaceholder
+  - hash:
+      serializedVersion: 2
+      Hash: bea08a80b8e638f24a8d7c0a7466ce66
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: BallManager
+  - hash:
+      serializedVersion: 2
+      Hash: 9d9d55729ecc8f318f190b79f751ff22
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CouchManager
   - hash:
       serializedVersion: 2
       Hash: 18c222bef9ae745ce69ddde9b74337ca
@@ -543,6 +765,12 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
+      Hash: e8ee00488c3588b62f46480ab1fc0afb
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ContinuePanel
+  - hash:
+      serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -621,6 +849,24 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
+      Hash: 7fa60faad97d12b952c4682b6dcefa7f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CouchIap
+  - hash:
+      serializedVersion: 2
+      Hash: d6e6d2afa0a38419296c6199e6f90d53
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SideCollider
+  - hash:
+      serializedVersion: 2
+      Hash: 85c8b92ac6906e3ab1fe5d5fd3e43a91
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: BallMain
+  - hash:
+      serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -643,9 +889,16 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: TouchInputModule
+  - hash:
+      serializedVersion: 2
+      Hash: e07817dee157a561b64706a285c849b6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: AdsConfiguration
   platform: 13
   scenePathNames:
   - Assets/Scenes/01-menu.unity
   - Assets/Scenes/02-game.unity
-  playerPath: "/Users/haixiangchen/Documents/\u5DE5\u4F5C/2048/Android/2048_2023-01-23
-    21-42-30.apk"
+  - Assets/Scenes/03-couch.unity
+  playerPath: "/Users/haixiangchen/Documents/\u5DE5\u4F5C/2048/Android/2048_2023-02-06
+    21-43-56.apk"

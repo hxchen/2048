@@ -48,12 +48,12 @@ public class Ball : MonoBehaviour
     
     public void Update() {
         if (transform.position.x < leftEdge || transform.position.x > rightEdge || transform.position.y < bottomEdge) {
-            Destroy(gameObject);
+            BallManager.instancs.RecycleBallsl(gameObject);
             BallMain.instance.SubtractLife();
             BallManager.instancs.NeedNewBall(true);
 
         } else {
-            scale = initSize + Mathf.Log(GetNumber(), 2) / 20;
+            scale = initSize + Mathf.Log(GetNumber(), 2) / 25;
             transform.localScale = new Vector3(scale, scale, 1);
             GetComponent<SpriteRenderer>().sprite = ballSprites[number_index.IndexOf(GetNumber())];
             numberText.color = num_Colors[number_index.IndexOf(GetNumber())];

@@ -13,14 +13,18 @@ public class CouchManager : MonoBehaviour
     // 商店itemId到prefab的索引
     public List<string> id_number_index;
 
-    private ShopConfiguration shopConfiguration;
+    private ShopItems shopItems;
 
     void Awake() {
         instance = this;
-        var serializer = new fsSerializer();
-        shopConfiguration = FileUtils.LoadJsonFile<ShopConfiguration>(serializer, "Config/shop_configuration");
-        IapItem iapItem = shopConfiguration.GetCurrentCouch();
-        CreateCouchByItemId(iapItem.itemId);
+        if (!PlayerPrefs.HasKey(Const.ShopConfiguration)) {
+            init();
+        } else {
+            var serializer = new fsSerializer();
+            shopItems = FileUtils.LoadJsonPrefs<ShopItems>(serializer, Const.ShopConfiguration);
+        }
+        IapItem currentItem = GetCurrentCouch();
+        CreateCouchByItemId(currentItem.itemId);
     }
 
     /// <summary>
@@ -36,4 +40,41 @@ public class CouchManager : MonoBehaviour
         GameObject couch = Instantiate(couchPrefabs[id_number_index.IndexOf(itemId)]);
         couch.transform.SetParent(couchManager.transform);
     }
+    /// <summary>
+    /// 商店内容初始化
+    /// </summary>
+    public void init() {
+        shopItems = new ShopItems();
+        shopItems.Add(new IapItem("couch_1", 0, IapItemStatusEnum.Using));
+        shopItems.Add(new IapItem("couch_2", 999, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_3", 1499, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_4", 1999, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_5", 2499, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_6", 2999, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_7", 3499, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_8", 9999, IapItemStatusEnum.Locked));
+        FileUtils.SaveJsonPrefs(Const.ShopConfiguration, shopItems);
+    }
+
+    public void initItem() {
+        IapItem item = new IapItem("couch_7", 3499, IapItemStatusEnum.Locked);
+        FileUtils.SaveJsonPrefs("couch_7", item);
+    }
+
+    public void UpdateIapItem(IapItem item) {
+        shopItems.GetIapItems().Find((IapItem obj) => item.itemId == obj.itemId).status = item.status;
+        FileUtils.SaveJsonPrefs(Const.ShopConfiguration, this);
+    }
+    /// <summary>
+    /// 获取当前选用的couch
+    /// </summary>
+    /// <returns></returns>
+    public IapItem GetCurrentCouch() {
+        return shopItems.GetIapItems().Find(iapItem => iapItem.status == IapItemStatusEnum.Using);
+    }
+
+    public List<IapItem> GetIapItems() {
+        return shopItems.GetIapItems();
+    }
+
 }

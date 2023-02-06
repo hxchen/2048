@@ -20,5 +20,7 @@ public class Const
     public const int WinCoins = 50;
     // 失败后奖励金币数量
     public const int LoseCoins = 10;
+    // Shop Config
+    public const string ShopConfiguration = "shop_configuration_items";
 
 }

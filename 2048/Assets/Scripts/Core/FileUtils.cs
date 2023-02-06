@@ -2,6 +2,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Assertions;
 using FullSerializer;
+using DG.Tweening.Plugins.Core.PathCore;
 
 public static class FileUtils
 {
@@ -46,5 +47,35 @@ public static class FileUtils
     public static bool FileExists(string path) {
         var textAsset = Resources.Load<TextAsset>(path);
         return textAsset != null;
+    }
+
+    /// <summary>
+    /// 保存 data 到 key 的 PlayerPrefs 中去
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
+    public static void SaveJsonPrefs<T>(string key, T data) where T : class {
+        fsData serializedData;
+        var serializer = new fsSerializer();
+        serializer.TrySerialize(data, out serializedData).AssertSuccessWithoutWarnings();
+        var json = fsJsonPrinter.PrettyJson(serializedData);
+        PlayerPrefs.SetString(key, json);
+    }
+
+    /// <summary>
+    /// 加载 key PlayerPrefs 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="serializer"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static T LoadJsonPrefs<T>(fsSerializer serializer, string key) where T : class {
+        string text = PlayerPrefs.GetString(key);
+        Assert.IsNotNull((text));
+        var data = fsJsonParser.Parse(text);
+        object deserialized = null;
+        serializer.TryDeserialize(data, typeof(T), ref deserialized).AssertSuccessWithoutWarnings();
+        return deserialized as T;
     }
 }
