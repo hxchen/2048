@@ -20,8 +20,7 @@ public class CouchManager : MonoBehaviour
         if (!PlayerPrefs.HasKey(Const.ShopConfiguration)) {
             init();
         } else {
-            var serializer = new fsSerializer();
-            shopItems = FileUtils.LoadJsonPrefs<ShopItems>(serializer, Const.ShopConfiguration);
+            shopItems = FileUtils.LoadJsonPrefs<ShopItems>(Const.ShopConfiguration);
         }
         IapItem currentItem = GetCurrentCouch();
         CreateCouchByItemId(currentItem.itemId);
@@ -63,7 +62,7 @@ public class CouchManager : MonoBehaviour
 
     public void UpdateIapItem(IapItem item) {
         shopItems.GetIapItems().Find((IapItem obj) => item.itemId == obj.itemId).status = item.status;
-        FileUtils.SaveJsonPrefs(Const.ShopConfiguration, this);
+        FileUtils.SaveJsonPrefs(Const.ShopConfiguration, shopItems);
     }
     /// <summary>
     /// 获取当前选用的couch

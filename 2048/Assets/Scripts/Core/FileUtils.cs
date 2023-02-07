@@ -70,7 +70,8 @@ public static class FileUtils
     /// <param name="serializer"></param>
     /// <param name="path"></param>
     /// <returns></returns>
-    public static T LoadJsonPrefs<T>(fsSerializer serializer, string key) where T : class {
+    public static T LoadJsonPrefs<T>(string key) where T : class {
+        var serializer = new fsSerializer();
         string text = PlayerPrefs.GetString(key);
         Assert.IsNotNull((text));
         var data = fsJsonParser.Parse(text);
