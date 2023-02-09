@@ -24,14 +24,14 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     string rewardedAdUnitId;
     string interstitialAdUnitId;
 
+    public bool isRewardedReady;
+
     // 广告类型
     enum AdsType {
         REWARDED,
         INTERSTITIAL,
         BANNER
     }
-    //当前播放的广告类型
-    AdsType currentAdsType;
 
     // 广告事件代理
     public Action<AdsEvent> OnUnityAdsEvent;
@@ -53,7 +53,8 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
             gameId = androidGameId;
             rewardedAdUnitId = rewardedAndroidAdUnitId;
             interstitialAdUnitId = interstitialAndroidAdUnitId;
-        } 
+        }
+        isRewardedReady = false;
         Advertisement.Initialize(gameId, adsTestMode, this);
     }
     /// <summary>
@@ -62,6 +63,7 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     /// <param name="finichCallbacl"></param>
     public void Subscribe(Action<AdsEvent> finichCallback) {
         OnUnityAdsEvent += finichCallback;
+        //Debug.Log($"注册事件回调:{finichCallback}");
     }
 
     /// <summary>
@@ -70,7 +72,9 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     /// <param name="finichCallbacl"></param>
     public void UnSubscribe(Action<AdsEvent> finichCallback) {
         OnUnityAdsEvent -= finichCallback;
+        //Debug.Log($"取消注册事件回调:{finichCallback}");
     }
+
 
     #region 广告
     /// <summary>
@@ -83,7 +87,6 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     /// 播放激励广告
     /// </summary>
     public void ShowRewardedAd() {
-        currentAdsType = AdsType.REWARDED;
         Advertisement.Show(rewardedAdUnitId, this);
     }
     /// <summary>
@@ -97,12 +100,11 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     /// 播放插页式广告
     /// </summary>
     public void ShowInterstitialAd() {
-        currentAdsType = AdsType.INTERSTITIAL;
         Advertisement.Show(interstitialAdUnitId, this);
     }
 
     public void OnInitializationComplete() {
-        Debug.Log("init completed");
+        //Debug.Log("init completed");
         LoadRewardedAd();
         LoadInterstitialAd();
     }
@@ -112,25 +114,32 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     }
 
     public void OnUnityAdsAdLoaded(string placementId) {
-        Debug.Log($"UnityAdsManager -> OnUnityAdsAdLoaded:{placementId}");
-        //if (adUnitId.Equals(adUnitId)) {
-        //    // Configure the button to call the ShowAd() method when clicked:
-        //    //_showAdButton.onClick.AddListener(ShowAd);
-        //    // Enable the button for users to click:
-        //    UnityAdsEvent("Loaded");
-        //}
+
+        //Debug.Log($"UnityAdsManager -> OnUnityAdsAdLoaded:{placementId}");
+        if (placementId.Equals(rewardedAdUnitId)) {
+            // Configure the button to call the ShowAd() method when clicked:
+            //_showAdButton.onClick.AddListener(ShowAd);
+            // Enable the button for users to click:
+            isRewardedReady = true;
+        }
     }
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message) {
-        throw new System.NotImplementedException();
+        Debug.LogError($"UnityAdsManager -> {placementId} Load Failed: [{error}]: {message}");
+        if (placementId.Equals(rewardedAdUnitId)) {
+            isRewardedReady = false;
+        }
     }
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message) {
-        throw new System.NotImplementedException();
+        Debug.LogError($"UnityAdsManager -> {placementId} Show Failed: [{error}]: {message}");
     }
 
     public void OnUnityAdsShowStart(string placementId) {
         //throw new System.NotImplementedException();
+        if (placementId.Equals(rewardedAdUnitId)) {
+            isRewardedReady = false;
+        }
         SoundManager.instance.SetBgmMute(true);
     }
 
@@ -139,13 +148,12 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
     }
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState) {
+        //Debug.Log($"UnityAdsManager -> OnUnityAdsShowComplete:{placementId} ：{showCompletionState}");
         if (rewardedAdUnitId.Equals(placementId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED)) {
             //Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
             SoundManager.instance.SetBgmMute(false);
             UnityAdsEvent(AdsEvent.SHOW_REWARDED_COMPLETED);
-            
-            // Load another ad:
             LoadRewardedAd();
         } else if (interstitialAdUnitId.Equals(placementId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED)) {
             SoundManager.instance.SetBgmMute(false);
@@ -154,8 +162,12 @@ public class UnityAdsManager : MonoBehaviour, IUnityAdsInitializationListener, I
         }
     }
 
-
+    /// <summary>
+    /// 注册订阅的进行回调通知
+    /// </summary>
+    /// <param name="adsEvent"></param>
     void UnityAdsEvent(AdsEvent adsEvent) {
+        //Debug.Log($"事件回调:{adsEvent}");
         OnUnityAdsEvent?.Invoke(adsEvent);
     }
     #endregion

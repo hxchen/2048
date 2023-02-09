@@ -11,7 +11,15 @@ public class ContinuePanel : View {
 
     [SerializeField] Button giveUpButton;
 
+    [SerializeField] Button buyButon;
+
     [SerializeField] Text addLifeText;
+
+    [SerializeField] Text timesLeftText;
+
+    [SerializeField] Text coinsToPlayOnText;
+
+    [SerializeField] Text currentCoinsText;
 
     
     private BallMain ballMain;
@@ -21,9 +29,27 @@ public class ContinuePanel : View {
     {
         ballMain = GameObject.Find("GameUICanvas/BallMain").GetComponent<BallMain>();
         addLifeText.text = $"+{Const.AdsRewardsForLife}";
+        coinsToPlayOnText.text = Const.CoinsToPlayOn.ToString();
         UnityAdsManager.instance.Subscribe(HandleAdsEvent);
     }
+    public override void Show()
+    {
+        base.Show();
+        if (UnityAdsManager.instance.isRewardedReady) {
+            playOnButton.interactable = true;
+        } else {
+            playOnButton.interactable = false;
+        }
+        if (PlayerPrefs.GetInt(Const.CouchCoins) >= Const.CoinsToPlayOn) {
+            buyButon.interactable = true;
+        } else {
+            buyButon.interactable = false;
+        }
+        currentCoinsText.text = PlayerPrefs.GetInt(Const.CouchCoins).ToString();
+        int left = ballMain.GetCurrentTimesOfAddingChances();
+        timesLeftText.text = $"{left} left";
 
+    }
     void OnDestroy()
     {
         UnityAdsManager.instance.UnSubscribe(HandleAdsEvent);
@@ -33,9 +59,18 @@ public class ContinuePanel : View {
     /// 继续游戏
     /// </summary>
     public void AddChancesAndContinueToPlay() {
-        Close();
         ballMain.AddLife(Const.AdsRewardsForLife);
         ballMain.Continue();
+        Close();
+    }
+    
+    /// <summary>
+    /// 没有机会后放弃游戏
+    /// </summary>
+    public void OnGiveUpButtonPresed() {
+        Close();
+        // 展示游戏结束界面
+        ballMain.GameLose();
     }
 
     /// <summary>
@@ -49,12 +84,11 @@ public class ContinuePanel : View {
     }
 
     /// <summary>
-    /// 没有机会后放弃游戏
+    /// 购买按钮
     /// </summary>
-    public void OnGiveUpButtonPresed() {
-        Close();
-        // 展示游戏结束界面
-        ballMain.GameLose();
+    public void OnBuyButtonPressed() {
+        ballMain.SubtractCoins(Const.CoinsToPlayOn);
+        AddChancesAndContinueToPlay();
     }
 
     /// <summary>
@@ -62,6 +96,7 @@ public class ContinuePanel : View {
     /// </summary>
     /// <param name="adsEvent"></param>
     void HandleAdsEvent(AdsEvent adsEvent) {
+        //Debug.Log($"接收事件回调:{adsEvent}");
         if (adsEvent == AdsEvent.SHOW_REWARDED_COMPLETED) {
             playOnButton.interactable = true;
             AddChancesAndContinueToPlay();

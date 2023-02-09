@@ -66,16 +66,19 @@ public class BallMain : MonoBehaviour {
     #endregion
 
     #region 逻辑
+    //当前金币
     private int coinsNumber;
 
     private int score;
+
+    private int bestScore;
 
     [Header("Number of life per round")]
     public int fullLife;
 
     private int currentLife;
 
-    private int currentTimesOfAddingChances;
+    private int currentTimesOfAddingChancesByAds;
 
     [Header("Init Coins")]
     public int initCoins;
@@ -85,9 +88,10 @@ public class BallMain : MonoBehaviour {
     void Awake() {
         instance = this;
         currentLife = fullLife;
-        currentTimesOfAddingChances = Const.AdsRewardsForLifeTimes;
+        currentTimesOfAddingChancesByAds = Const.AdsRewardsForLifeTimes;
         lifeText.text = currentLife.ToString();
-        bestScoreText.text = PlayerPrefs.GetInt(Const.BestScoreBall, 0).ToString();
+        bestScore = PlayerPrefs.GetInt(Const.BestScoreBall, 0);
+        bestScoreText.text = bestScore.ToString();
         // 初始化金币
         if (PlayerPrefs.HasKey(Const.CouchCoins)) {
             coinsNumber = PlayerPrefs.GetInt(Const.CouchCoins);
@@ -100,7 +104,13 @@ public class BallMain : MonoBehaviour {
         targetCoinsPosition = coinsObject.transform.position;
         PrepareCoins();
     }
-
+    void Update()
+    {
+        // 因为有动画，不能更新到实时金币显示
+        //coinsNumberText.text = coinsNumber.ToString();
+        bestScoreText.text = bestScore.ToString();
+        lifeText.text = currentLife.ToString();
+    }
     /// <summary>
     /// 初始化金币池
     /// </summary>
@@ -167,7 +177,6 @@ public class BallMain : MonoBehaviour {
     /// </summary>
     /// <param name="score"></param>
     public void UpdateBestScore(int currentScore) {
-        int bestScore = PlayerPrefs.GetInt(Const.BestScoreBall, 0);
         if (currentScore > bestScore) {
             bestScore = currentScore;
             bestScoreText.text = bestScore.ToString();
@@ -211,9 +220,11 @@ public class BallMain : MonoBehaviour {
     public void SubtractLife() {
         currentLife--;
         if (currentLife <= 0) {
-            if (currentTimesOfAddingChances > 0) {
+            if (currentTimesOfAddingChancesByAds > 0 || PlayerPrefs.GetInt(Const.CouchCoins) >= Const.CoinsToPlayOn) {
+                BallManager.instancs.ReleaseSelectedBall();
                 NowMoreChances();
             } else {
+                BallManager.instancs.ReleaseSelectedBall();
                 GameLose();
             }
         }
@@ -227,12 +238,25 @@ public class BallMain : MonoBehaviour {
     /// </summary>
     /// <param name="value"></param>
     public void AddLife(int value) {
-        if (currentTimesOfAddingChances <= 0) {
-            return;
-        }
         currentLife += value;
         lifeText.text = currentLife.ToString();
-        currentTimesOfAddingChances--;
+    }
+
+    /// <summary>
+    /// 通过广告添加生命
+    /// </summary>
+    /// <param name="value"></param>
+    public void AddLifeByAds(int value) {
+        AddLife(value);
+        currentTimesOfAddingChancesByAds--;
+    }
+
+    /// <summary>
+    /// 获取剩余加生命次数
+    /// </summary>
+    /// <returns></returns>
+    public int GetCurrentTimesOfAddingChances() {
+        return currentTimesOfAddingChancesByAds;
     }
 
     /// <summary>
@@ -285,7 +309,7 @@ public class BallMain : MonoBehaviour {
         score = 0;
         scoreText.text = score.ToString();
         // 更新看广告次数
-        currentTimesOfAddingChances = Const.AdsRewardsForLifeTimes;
+        currentTimesOfAddingChancesByAds = Const.AdsRewardsForLifeTimes;
         // 清空球
         ClearBalls();
         BallManager.instancs.StartGame();

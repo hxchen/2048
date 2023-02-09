@@ -52,8 +52,10 @@ public class WinPanel : View {
     /// <param name="adsEvent"></param>
     void HandleAdsEvent(AdsEvent adsEvent) {
         if (adsEvent == AdsEvent.SHOW_REWARDED_COMPLETED) {
+            Close();
             watchAdsButton.interactable = true;
             ballMain.AddCoins(Const.WinCoins * 2);
+            
         }
     }
 

@@ -205,12 +205,14 @@ public class BallManager : MonoBehaviour
         }
     }
     /// <summary>
-    /// 重设状态
+    /// 释放选择球状态
     /// </summary>
-    public void ResetState() {
-        //selectedBall.GetComponent<SpringJoint2D>().enabled = false;
-        //selectedBall.GetComponent<LineRenderer>().enabled = false;
-        selectedBall = null;
+    public void ReleaseSelectedBall() {
+        if (selectedBall != null) {
+            selectedBall.GetComponent<SpringJoint2D>().enabled = false;
+            selectedBall.GetComponent<LineRenderer>().enabled = false;
+            selectedBall = null;
+        }
     }
 
     public void SetGameState(GameState state) {

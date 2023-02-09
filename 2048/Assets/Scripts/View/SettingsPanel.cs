@@ -35,7 +35,7 @@ public class SettingsPanel : View
     public override void Show() {
         base.Show();
         soundSlider.value = PlayerPrefs.GetFloat(Const.Sound, 0.5f);
-        musicSlider.value = PlayerPrefs.GetFloat(Const.Music, 0f);
+        musicSlider.value = PlayerPrefs.GetFloat(Const.Music, 0.5f);
     }
 
 }
