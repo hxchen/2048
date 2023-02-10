@@ -24,6 +24,6 @@ public class Const
     // Shop Config
     public const string ShopConfiguration = "shop_configuration_items";
     // 失败后继续玩的金币价格
-    public const int CoinsToPlayOn = 50;
+    public const int CoinsToPlayOn = 25;
 
 }
