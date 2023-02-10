@@ -45,13 +45,13 @@ public class CouchManager : MonoBehaviour
     public void init() {
         shopItems = new ShopItems();
         shopItems.Add(new IapItem("couch_1", 0, IapItemStatusEnum.Using));
-        shopItems.Add(new IapItem("couch_2", 999, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_3", 1499, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_4", 1999, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_5", 2499, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_6", 2999, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_7", 3499, IapItemStatusEnum.Locked));
-        shopItems.Add(new IapItem("couch_8", 9999, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_2", 500, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_3", 1000, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_4", 1500, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_5", 2000, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_6", 2500, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_7", 3000, IapItemStatusEnum.Locked));
+        shopItems.Add(new IapItem("couch_8", 3500, IapItemStatusEnum.Locked));
         FileUtils.SaveJsonPrefs(Const.ShopConfiguration, shopItems);
     }
 
