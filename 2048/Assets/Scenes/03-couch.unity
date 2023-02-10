@@ -5571,7 +5571,7 @@ MonoBehaviour:
   easeTYpe: 28
   spreed: 0.2
   fullLife: 9
-  initCoins: 100000
+  initCoins: 100
 --- !u!1 &1731018801
 GameObject:
   m_ObjectHideFlags: 0

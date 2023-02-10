@@ -69,7 +69,6 @@ public class CouchIap : MonoBehaviour
                     }
                 }
                 // 2.解锁过的变为使用
-                Debug.Log("TODO :保存为使用中");
                 iapItem.status = IapItemStatusEnum.Using;
                 buttonText.text = "Using";
                 CouchManager.instance.UpdateIapItem(iapItem);
