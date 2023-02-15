@@ -895,4 +895,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/01-menu.unity
   - Assets/Scenes/02-game.unity
   - Assets/Scenes/03-couch.unity
-  playerPath: "/Users/haixiangchen/Documents/\u5DE5\u4F5C/2048/Android/2048_\u6D4B\u8BD5\u5546\u54C1.apk"
+  playerPath: "/Users/haixiangchen/Documents/\u5DE5\u4F5C/2048/Android/2048_final3_2023-02-10
+    18-21-40.aab"
